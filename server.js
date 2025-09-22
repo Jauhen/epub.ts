@@ -1,0 +1,20 @@
+const Metro = require('metro');
+const express = require('express');
+const app = express();
+
+const hostname = 'localhost';
+
+Metro.loadConfig().then(async config => {
+  const metroBundlerServer = await Metro.runMetro(config);
+  app.use(metroBundlerServer.processRequest.bind(metroBundlerServer));
+
+  app.use('/', express.static('examples'));
+
+  const { server: serverConfig } = config;
+  const { port } = serverConfig;
+  app.listen(port, hostname, () => {
+    setTimeout(() => {
+      console.log(`Server running at http://${hostname}:${port}/`);
+    }, 100);
+  });
+});

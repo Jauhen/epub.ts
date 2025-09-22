@@ -1,0 +1,30 @@
+import Locations from '../src/locations';
+import * as core from '../src/utils/core';
+import { expect } from '@esm-bundle/chai';
+
+describe('Locations', async () => {
+  describe('#parse', async () => {
+    it('parse locations from a document', async () => {
+      const chapter = await (
+        await fetch('./test/fixtures/locations.xhtml')
+      ).text();
+      var doc = core.parse(chapter, 'application/xhtml+xml', true);
+      var contents = doc.documentElement;
+      var locations = new Locations({});
+      var result = locations.parse(contents, '/6/4[chap01ref]', 100);
+      expect(result.length).to.equal(15);
+    });
+
+    it('parse locations from xmldom', async () => {
+      const chapter = await (
+        await fetch('./test/fixtures/locations.xhtml')
+      ).text();
+      var doc = core.parse(chapter, 'application/xhtml+xml', true);
+      var contents = doc.documentElement;
+
+      var locations = new Locations({});
+      var result = locations.parse(contents, '/6/4[chap01ref]', 100);
+      expect(result.length).to.equal(15);
+    });
+  });
+});

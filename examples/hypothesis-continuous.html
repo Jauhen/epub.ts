@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EPUB.js Continuous Example</title>
 
-  <script src="../dist/epub.js"></script>
+  <script src="/src/index.bundle?platform=web&dev=true&minify=false"></script>
   <!-- <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script> -->
   <script src="//hypothes.is/embed.js"></script>
 
@@ -98,28 +98,28 @@
       return view.addScript("//hypothes.is/embed.js").then(function() {
         view.window.hypothesisConfig = function () {
 
-      		return {
-      			constructor: this.Annotator.Guest,
-              	app: 'https://hypothes.is/app.html'
-      		};
-      	};
+          return {
+            constructor: this.Annotator.Guest,
+                app: 'https://hypothes.is/app.html'
+          };
+        };
 
         // view.window.hypothesisInstall();
       });
     });
 
     book.rendition.hooks.render.register(function(view) {
-    	var getVisibleAnnotations = function ($) {
-    		var height = document.documentElement.clientHeight;
-    		return $('.annotator-hl').map(function() {
-    			var $this = $(this),
+      var getVisibleAnnotations = function ($) {
+        var height = document.documentElement.clientHeight;
+        return $('.annotator-hl').map(function() {
+          var $this = $(this),
               pos = view.position().top,
               top = pos + this.getBoundingClientRect().top;
-    			if (top >= 0 && top <= height) {
-    				return $this.data('annotation');
-    			}
-    		}).get();
-    	};
+          if (top >= 0 && top <= height) {
+            return $this.data('annotation');
+          }
+        }).get();
+      };
       book.rendition.on("scroll", function() {
         var annotator = view.window.annotator;
         var annotations;

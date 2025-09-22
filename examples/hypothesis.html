@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EPUB.js + Hypothes.is Example</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-  <script src="../dist/epub.js"></script>
+  <script src="/src/index.bundle?platform=web&dev=true&minify=false"></script>
 
   <!-- <script>
   window.hypothesisConfig = function () {
@@ -22,7 +23,7 @@
       return {
         openSidebar: false,
         enableMultiFrameSupport: true,
-        onLayoutChange: function(state) {
+        onLayoutChange: function (state) {
           var main = document.querySelector('#main');
           if (state.expanded === true) {
             main.classList.add("open");
@@ -172,13 +173,13 @@
       width: 100%;
       height: 100%;
     }
-
   </style>
 </head>
+
 <body>
   <div id="navigation">
     <h1 id="title">...</h1>
-    <image id="cover" width="150px"/>
+    <image id="cover" width="150px" />
     <h2 id="author">...</h2>
     <ul id="toc"></ul>
   </div>
@@ -205,34 +206,34 @@
     // var hash = window.location.hash.slice(2);
     var loc = window.location.href.indexOf("?loc=");
     if (loc > -1) {
-      var href =  window.location.href.slice(loc + 5);
+      var href = window.location.href.slice(loc + 5);
       var hash = decodeURIComponent(href);
     }
     rendition.display(hash || undefined);
 
 
     var next = document.getElementById("next");
-    next.addEventListener("click", function(e){
-      window.scrollTo(0,0);
+    next.addEventListener("click", function (e) {
+      window.scrollTo(0, 0);
       rendition.next();
       e.preventDefault();
     }, false);
 
     var prev = document.getElementById("prev");
-    prev.addEventListener("click", function(e){
-      window.scrollTo(0,0);
+    prev.addEventListener("click", function (e) {
+      window.scrollTo(0, 0);
       rendition.prev();
       e.preventDefault();
     }, false);
 
-    rendition.on("rendered", function(section){
+    rendition.on("rendered", function (section) {
       var nextSection = section.next();
       var prevSection = section.prev();
 
-      if(nextSection) {
+      if (nextSection) {
         nextNav = book.navigation.get(nextSection.href);
 
-        if(nextNav) {
+        if (nextNav) {
           nextLabel = nextNav.label;
         } else {
           nextLabel = "next";
@@ -243,10 +244,10 @@
         next.textContent = "";
       }
 
-      if(prevSection) {
+      if (prevSection) {
         prevNav = book.navigation.get(prevSection.href);
 
-        if(prevNav) {
+        if (prevNav) {
           prevLabel = prevNav.label;
         } else {
           prevLabel = "previous";
@@ -262,7 +263,7 @@
         link.classList.remove("active");
       })
 
-      var active = document.querySelector('a[href="'+section.href+'"]');
+      var active = document.querySelector('a[href="' + section.href + '"]');
       if (active) {
         active.classList.add("active");
       }
@@ -271,11 +272,11 @@
       // window.location.hash = "#/"+section.href
     });
 
-    book.loaded.navigation.then(function(toc){
+    book.loaded.navigation.then(function (toc) {
       var $nav = document.getElementById("toc"),
-          docfrag = document.createDocumentFragment();
+        docfrag = document.createDocumentFragment();
 
-      toc.forEach(function(chapter, index) {
+      toc.forEach(function (chapter, index) {
         var item = document.createElement("li");
         var link = document.createElement("a");
         link.id = "chap-" + chapter.id;
@@ -284,7 +285,7 @@
         item.appendChild(link);
         docfrag.appendChild(item);
 
-        link.onclick = function(){
+        link.onclick = function () {
           var url = link.getAttribute("href");
           console.log(url)
           rendition.display(url);
@@ -298,7 +299,7 @@
 
     });
 
-    book.loaded.metadata.then(function(meta){
+    book.loaded.metadata.then(function (meta) {
       var $title = document.getElementById("title");
       var $author = document.getElementById("author");
       var $cover = document.getElementById("cover");
@@ -322,10 +323,10 @@
     });
 
     function checkForAnnotator(cb, w) {
-     if (!w) {
-       w = window;
-     }
-     setTimeout(function () {
+      if (!w) {
+        w = window;
+      }
+      setTimeout(function () {
         if (w && w.annotator) {
           cb();
         } else {
@@ -334,36 +335,37 @@
       }, 100);
     }
 
-    book.rendition.hooks.content.register(function(contents, view) {
+    book.rendition.hooks.content.register(function (contents, view) {
 
-        checkForAnnotator(function () {
+      checkForAnnotator(function () {
 
-          var annotator = contents.window.annotator;
+        var annotator = contents.window.annotator;
 
-          contents.window.addEventListener('scrolltorange', function (e) {
-            var range = e.detail;
-            var cfi = new ePub.CFI(range, contents.cfiBase).toString();
-            if (cfi) {
-              book.rendition.display(cfi);
-            }
-            e.preventDefault();
-          });
+        contents.window.addEventListener('scrolltorange', function (e) {
+          var range = e.detail;
+          var cfi = new ePub.CFI(range, contents.cfiBase).toString();
+          if (cfi) {
+            book.rendition.display(cfi);
+          }
+          e.preventDefault();
+        });
 
 
-          annotator.on("highlightClick", function (annotation) {
-            console.log(annotation);
-            window.annotator.show();
-          })
+        annotator.on("highlightClick", function (annotation) {
+          console.log(annotation);
+          window.annotator.show();
+        })
 
-          annotator.on("beforeAnnotationCreated", function (annotation) {
-            console.log(annotation);
-            window.annotator.show();
-          })
+        annotator.on("beforeAnnotationCreated", function (annotation) {
+          console.log(annotation);
+          window.annotator.show();
+        })
 
-        }, contents.window);
+      }, contents.window);
 
     });
   </script>
 
 </body>
+
 </html>

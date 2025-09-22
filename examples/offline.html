@@ -7,7 +7,7 @@
 
   <script src="../node_modules/jszip/dist/jszip.min.js"></script>
   <script src="../node_modules/localforage/dist/localforage.min.js"></script>
-  <script src="../dist/epub.js"></script>
+  <script src="/src/index.bundle?platform=web&dev=true&minify=false"></script>
 
   <link rel="stylesheet" type="text/css" href="examples.css">
 
@@ -81,14 +81,14 @@
 
     var msg = document.getElementById('offline');
     book.storage.on("online", function () {
-			console.log("online");
-			msg.style.top = "-40px";
-		});
+      console.log("online");
+      msg.style.top = "-40px";
+    });
 
-		book.storage.on("offline", function () {
-			console.log("offline");
-			msg.style.top = "0px";
-		});
+    book.storage.on("offline", function () {
+      console.log("offline");
+      msg.style.top = "0px";
+    });
 
 
   </script>

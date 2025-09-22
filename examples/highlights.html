@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EPUB.js Highlights Example</title>
 
-  <script src="../dist/epub.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+  <script src="/src/index.bundle?platform=web&dev=true&minify=false"></script>
 
   <link rel="stylesheet" type="text/css" href="examples.css">
 
@@ -65,7 +63,7 @@
 
   <script>
     // Load the opf
-    var book = ePub("https://s3.amazonaws.com/moby-dick/OPS/package.opf");
+    var book = ePub("/fixtures/alice/OPS/package.opf");
 
     var rendition = book.renderTo("viewer", {
       width: "100%",
@@ -114,7 +112,7 @@
 
 
     // Apply a class to selected text
-    rendition.on("selected", function(cfiRange, contents) {
+    rendition.on("selected", function({cfiRange, contents}) {
       rendition.annotations.highlight(cfiRange, {}, (e) => {
         console.log("highlight clicked", e.target);
       });
@@ -134,7 +132,7 @@
     // Illustration of how to get text from a saved cfiRange
     var highlights = document.getElementById('highlights');
 
-    rendition.on("selected", function(cfiRange) {
+    rendition.on("selected", function({cfiRange}) {
 
       book.getRange(cfiRange).then(function (range) {
         var text;

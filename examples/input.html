@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EPUB.js Input Example</title>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-  <script src="../dist/epub.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script> -->
+  <script src="/src/index.bundle?platform=web&dev=true&minify=false"></script>
 
   <link rel="stylesheet" type="text/css" href="examples.css">
 
@@ -47,8 +47,8 @@
     });
 
     rendition.display();
-	
-	var keyListener = function(e){
+  
+  var keyListener = function(e){
 
       // Left Key
       if ((e.keyCode || e.which) == 37) {

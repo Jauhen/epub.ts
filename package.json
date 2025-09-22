@@ -10,12 +10,12 @@
     "test": "test"
   },
   "scripts": {
+    "start": "node server.js",
     "test": "karma start --single-run --browsers ChromeHeadlessNoSandbox",
     "docs": "documentation build src/epub.js -f html -o documentation/html/",
     "docs:html": "documentation build src/epub.js -f html -o documentation/html/",
     "docs:md": "documentation build src/epub.js -f md -o documentation/md/API.md",
     "lint": "eslint -c .eslintrc.js src; exit 0",
-    "start": "node server.js",
     "build": "NODE_ENV=production node build.js",
     "minify": "NODE_ENV=production MINIMIZE=true node build.js",
     "legacy": "NODE_ENV=production LEGACY=true node build.js",

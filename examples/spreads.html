@@ -6,7 +6,7 @@
   <title>EPUB.js Spreads Example</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-  <script src="../dist/epub.js"></script>
+  <script src="/src/index.bundle?platform=web&dev=true&minify=false"></script>
 
   <link rel="stylesheet" type="text/css" href="examples.css">
 
@@ -28,7 +28,8 @@
     var rendition = book.renderTo("viewer", {
       width: "100%",
       height: 600,
-      spread: "always"
+      spread: "always",
+      allowScriptedContent: true
     });
 
     rendition.display(currentSectionIndex);
@@ -91,8 +92,6 @@
     });
 
     rendition.on("relocated", function(location){
-      console.log(location);
-
       var next = book.package.metadata.direction === "rtl" ?  document.getElementById("prev") : document.getElementById("next");
       var prev = book.package.metadata.direction === "rtl" ?  document.getElementById("next") : document.getElementById("prev");
 
@@ -147,10 +146,6 @@
 			};
 
 		});
-
-
-
-
   </script>
 
 </body>

@@ -3,7 +3,7 @@ import { expect } from '@esm-bundle/chai';
 
 describe('section', function () {
   it('finds a single result in a section', async () => {
-    var book = ePub('./test/fixtures/alice/', { width: 400, height: 400 });
+    var book = ePub('./test/fixtures/alice/');
     await book.ready;
     var section = book.section('chapter_001.xhtml')!;
     await section.load();
@@ -22,7 +22,7 @@ describe('section', function () {
   });
 
   it('finds multiple results in a section', async () => {
-    var book = ePub('./test/fixtures/alice/', { width: 400, height: 400 });
+    var book = ePub('./test/fixtures/alice/');
     await book.ready;
     var section = book.section('chapter_001.xhtml')!;
     await section.load();
@@ -47,7 +47,7 @@ describe('section', function () {
   });
 
   it('finds result that spanning multiple document nodes, tag at ending', async () => {
-    var book = ePub('./test/fixtures/alice/', { width: 400, height: 400 });
+    var book = ePub('./test/fixtures/alice/');
     await book.ready;
     var section = book.section('chapter_010.xhtml')!;
     await section.load();
@@ -65,7 +65,7 @@ describe('section', function () {
   });
 
   it('finds result that spanning multiple document nodes, tag at middle', async () => {
-    var book = ePub('./test/fixtures/alice/', { width: 400, height: 400 });
+    var book = ePub('./test/fixtures/alice/');
     await book.ready;
     var section = book.section('chapter_010.xhtml')!;
     await section.load();

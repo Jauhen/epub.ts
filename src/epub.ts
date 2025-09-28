@@ -1,4 +1,4 @@
-import Book from './book';
+import Book, { type BookOptions } from './book';
 import Rendition from './rendition';
 import CFI from './epubcfi';
 import Contents from './contents';
@@ -12,11 +12,11 @@ import ContinuousViewManager from './managers/continuous';
 /**
  * Creates a new Book
  * @param {string|ArrayBuffer} url URL, Path or ArrayBuffer
- * @param {object} options to pass to the book
+ * @param {BookOptions} options to pass to the book
  * @returns {Book} a new Book object
  * @example ePub("/path/to/book.epub", {})
  */
-function ePub(url: string | ArrayBuffer, options?: object): Book {
+function ePub(url: string | ArrayBuffer, options?: BookOptions): Book {
   return new Book(url, options);
 }
 

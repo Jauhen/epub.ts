@@ -65,7 +65,6 @@ export interface BookOptions {
  * @example new Book("/path/to/book.epub", {})
  * @example new Book({ replacements: "blobUrl" })
  */
-
 export interface BookOptions {
   requestMethod?: RequestMethod;
   requestCredentials?: boolean;

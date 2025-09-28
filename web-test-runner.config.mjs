@@ -25,6 +25,7 @@ export default {
       esmExternals: true,
       defaultIsModuleExports: true,
       requireReturnsDefault: true,
+      strictRequires: 'auto',
     }),
     esbuildPlugin({ ts: true }),
     visualRegressionPlugin({

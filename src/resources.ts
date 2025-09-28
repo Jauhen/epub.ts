@@ -16,12 +16,12 @@ import type Archive from './archive';
  * @param {Archive} [options.archive]
  * @param {method} [options.resolver]
  */
-type ResourcesOptions = {
+interface ResourcesOptions {
   replacements?: string;
   archive?: Archive;
   resolver?: (url: string) => string;
   request?: (url: string, type?: string) => Promise<any>;
-};
+}
 
 interface ResourceItem {
   href: string;
@@ -189,7 +189,7 @@ class Resources {
    * @return {Promise}  returns a BlobUrl to the new CSS file or a data url
    */
   private createCssFile(href: string): Promise<string> {
-    let newUrl: string = '';
+    let newUrl = '';
     if (path.isAbsolute(href)) {
       return Promise.resolve('');
     }

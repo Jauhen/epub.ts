@@ -7,13 +7,13 @@ if (typeof DOMParser === 'undefined') {
 
 describe('EpubCFI', function () {
   it('parse a cfi on init', function () {
-    var cfi = new EpubCFI('epubcfi(/6/2[cover]!/6)');
+    const cfi = new EpubCFI('epubcfi(/6/2[cover]!/6)');
 
     expect(cfi.spinePos).to.equal(0, 'spinePos is parsed as the first item');
   });
 
   it('parse a cfi and ignore the base if present', function () {
-    var cfi = new EpubCFI('epubcfi(/6/2[cover]!/6)', '/6/6[end]');
+    const cfi = new EpubCFI('epubcfi(/6/2[cover]!/6)', '/6/6[end]');
 
     expect(cfi.spinePos).to.equal(
       0,
@@ -22,10 +22,10 @@ describe('EpubCFI', function () {
   });
 
   describe('#parse()', function () {
-    var cfi = new EpubCFI();
+    const cfi = new EpubCFI();
 
     it('parse a cfi on init', function () {
-      var parsed = cfi.parse('epubcfi(/6/2[cover]!/6)');
+      const parsed = cfi.parse('epubcfi(/6/2[cover]!/6)');
 
       expect(parsed.spinePos).to.equal(
         0,
@@ -34,7 +34,7 @@ describe('EpubCFI', function () {
     });
 
     it('parse a cfi and ignore the base if present', function () {
-      var parsed = cfi.parse('epubcfi(/6/2[cover]!/6)');
+      const parsed = cfi.parse('epubcfi(/6/2[cover]!/6)');
 
       expect(parsed.spinePos).to.equal(
         0,
@@ -43,7 +43,7 @@ describe('EpubCFI', function () {
     });
 
     it('parse a cfi with a character offset', function () {
-      var parsed = cfi.parse(
+      const parsed = cfi.parse(
         'epubcfi(/6/4[chap01ref]!/4[body01]/10[para05]/2/1:3)',
       );
 
@@ -54,7 +54,7 @@ describe('EpubCFI', function () {
     });
 
     it('parse a cfi with a range', function () {
-      var parsed = cfi.parse(
+      const parsed = cfi.parse(
         'epubcfi(/6/4[chap01ref]!/4[body01]/10[para05],/2/1:1,/3:4)',
       );
 
@@ -99,31 +99,31 @@ describe('EpubCFI', function () {
 
   describe('#checkType()', function () {
     it('determine the type of a cfi string', function () {
-      var cfi = new EpubCFI();
+      const cfi = new EpubCFI();
 
       expect(cfi.checkType('epubcfi(/6/2[cover]!/6)')).to.equal('string');
       expect(cfi.checkType('/6/2[cover]!/6')).to.equal(false);
     });
 
     it('determine the type of a cfi', function () {
-      var ogcfi = new EpubCFI(
+      const ogcfi = new EpubCFI(
         'epubcfi(/6/4[chap01ref]!/4[body01]/10[para05]/2/1:3)',
       );
-      var cfi = new EpubCFI();
+      const cfi = new EpubCFI();
 
       expect(cfi.checkType(ogcfi)).to.equal('EpubCFI');
     });
 
     it('determine the type of a node', function () {
-      var cfi = new EpubCFI();
-      var el = document.createElement('div');
+      const cfi = new EpubCFI();
+      const el = document.createElement('div');
 
       expect(cfi.checkType(el)).to.equal('node');
     });
 
     it('determine the type of a range', function () {
-      var cfi = new EpubCFI();
-      var range = document.createRange();
+      const cfi = new EpubCFI();
+      const range = document.createRange();
 
       expect(cfi.checkType(range)).to.equal('range');
     });
@@ -131,7 +131,7 @@ describe('EpubCFI', function () {
 
   describe('#compare()', function () {
     it('compare CFIs', function () {
-      var epubcfi = new EpubCFI();
+      const epubcfi = new EpubCFI();
 
       // Spines
       expect(
@@ -254,7 +254,7 @@ describe('EpubCFI', function () {
     this.beforeAll(async () => {
       base = '/6/4[chap01ref]';
       // var contents = fs.readFileSync(__dirname + '/fixtures/chapter1-highlights.xhtml', 'utf8');
-      var contents = await (
+      const contents = await (
         await fetch('./test/fixtures/chapter1-highlights.xhtml')
       ).text();
 
@@ -264,8 +264,8 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a p node', function () {
-      var span = doc.getElementById('c001p0004')!;
-      var cfi = new EpubCFI(span, base);
+      const span = doc.getElementById('c001p0004')!;
+      const cfi = new EpubCFI(span, base);
 
       expect(span.nodeType).to.equal(
         Node.ELEMENT_NODE,
@@ -277,8 +277,8 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a text node', function () {
-      var t = doc.getElementById('c001p0004')!.childNodes[0];
-      var cfi = new EpubCFI(t, base);
+      const t = doc.getElementById('c001p0004')!.childNodes[0];
+      const cfi = new EpubCFI(t, base);
 
       expect(t.nodeType).to.equal(Node.TEXT_NODE, 'provided a text node');
       expect(cfi.toString()).to.equal(
@@ -287,8 +287,8 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a text node inside a highlight', function () {
-      var t = doc.getElementById('highlight-1')!.childNodes[0];
-      var cfi = new EpubCFI(t, base, 'annotator-hl');
+      const t = doc.getElementById('highlight-1')!.childNodes[0];
+      const cfi = new EpubCFI(t, base, 'annotator-hl');
 
       expect(t.nodeType).to.equal(Node.TEXT_NODE, 'provided a text node');
       expect(cfi.toString()).to.equal(
@@ -297,8 +297,8 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a highlight node', function () {
-      var t = doc.getElementById('highlight-1')!;
-      var cfi = new EpubCFI(t, base, 'annotator-hl');
+      const t = doc.getElementById('highlight-1')!;
+      const cfi = new EpubCFI(t, base, 'annotator-hl');
 
       expect(t.nodeType).to.equal(
         Node.ELEMENT_NODE,
@@ -320,7 +320,7 @@ describe('EpubCFI', function () {
       base = '/6/4[chap01ref]';
 
       // var contentsClean = fs.readFileSync(__dirname + '/fixtures/chapter1.xhtml', 'utf8');
-      var contentsClean = await (
+      const contentsClean = await (
         await fetch('./test/fixtures/chapter1.xhtml')
       ).text();
 
@@ -330,7 +330,7 @@ describe('EpubCFI', function () {
       );
 
       // var contentsHighlights = fs.readFileSync(__dirname + '/fixtures/chapter1-highlights.xhtml', 'utf8');
-      var contentsHighlights = await (
+      const contentsHighlights = await (
         await fetch('./test/fixtures/chapter1-highlights.xhtml')
       ).text();
       docHighlights = new DOMParser().parseFromString(
@@ -339,7 +339,7 @@ describe('EpubCFI', function () {
       );
 
       // var highlightContents = fs.readFileSync(__dirname + '/fixtures/highlight.xhtml', 'utf8');
-      var highlightContents = await (
+      const highlightContents = await (
         await fetch('./test/fixtures/highlight.xhtml')
       ).text();
       docHighlightsAlice = new DOMParser().parseFromString(
@@ -349,10 +349,10 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a collapsed range', function () {
-      var t1 = doc.getElementById('c001p0004')!.childNodes[0];
-      var t2 = doc.getElementById('c001p0007')!.childNodes[0];
-      var range = doc.createRange();
-      var cfi;
+      const t1 = doc.getElementById('c001p0004')!.childNodes[0];
+      const t2 = doc.getElementById('c001p0007')!.childNodes[0];
+      const range = doc.createRange();
+      let cfi;
 
       range.setStart(t1, 6);
 
@@ -365,10 +365,10 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a range', function () {
-      var t1 = doc.getElementById('c001p0004')!.childNodes[0];
-      var t2 = doc.getElementById('c001p0007')!.childNodes[0];
-      var range = doc.createRange();
-      var cfi;
+      const t1 = doc.getElementById('c001p0004')!.childNodes[0];
+      const t2 = doc.getElementById('c001p0007')!.childNodes[0];
+      const range = doc.createRange();
+      let cfi;
 
       range.setStart(t1, 6);
       range.setEnd(t2, 27);
@@ -382,9 +382,9 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a range with offset 0', function () {
-      var t1 = doc.getElementById('c001p0004')!.childNodes[0];
-      var range = doc.createRange();
-      var cfi;
+      const t1 = doc.getElementById('c001p0004')!.childNodes[0];
+      const range = doc.createRange();
+      let cfi;
 
       range.setStart(t1, 0);
       range.setEnd(t1, 1);
@@ -398,9 +398,9 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a range inside a highlight', function () {
-      var t1 = docHighlights.getElementById('highlight-1')!.childNodes[0];
-      var range = docHighlights.createRange();
-      var cfi;
+      const t1 = docHighlights.getElementById('highlight-1')!.childNodes[0];
+      const range = docHighlights.createRange();
+      let cfi;
 
       range.setStart(t1, 6);
 
@@ -412,9 +412,9 @@ describe('EpubCFI', function () {
     });
     // TODO: might need to have double ranges in front
     it('get a cfi from a range past a highlight', function () {
-      var t1 = docHighlights.getElementById('c001s0001')!.childNodes[1];
-      var range = docHighlights.createRange();
-      var cfi;
+      const t1 = docHighlights.getElementById('c001s0001')!.childNodes[1];
+      const range = docHighlights.createRange();
+      let cfi;
 
       range.setStart(t1, 25);
 
@@ -426,9 +426,9 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a range in between two highlights', function () {
-      var t1 = docHighlightsAlice.getElementById('p2')!.childNodes[1];
-      var range = docHighlightsAlice.createRange();
-      var cfi;
+      const t1 = docHighlightsAlice.getElementById('p2')!.childNodes[1];
+      const range = docHighlightsAlice.createRange();
+      let cfi;
 
       range.setStart(t1, 4);
 
@@ -440,9 +440,9 @@ describe('EpubCFI', function () {
     });
 
     it('correctly count text nodes, independent of any elements present inbetween', function () {
-      var t1 = docHighlightsAlice.getElementById('p3')!.childNodes[2];
-      var range = docHighlightsAlice.createRange();
-      var cfi;
+      const t1 = docHighlightsAlice.getElementById('p3')!.childNodes[2];
+      const range = docHighlightsAlice.createRange();
+      let cfi;
 
       range.setStart(t1, 4);
 
@@ -459,7 +459,7 @@ describe('EpubCFI', function () {
     this.beforeAll(async () => {
       base = '/6/4[chap01ref]';
       // var contents = fs.readFileSync(__dirname + '/fixtures/chapter1-highlights.xhtml', 'utf8');
-      var contents = await (
+      const contents = await (
         await fetch('./test/fixtures/chapter1-highlights.xhtml')
       ).text();
 
@@ -470,11 +470,11 @@ describe('EpubCFI', function () {
     // console.log(serializer.serializeToString(doc));
 
     it('get a range from a cfi', function () {
-      var t1 = doc.getElementById('c001p0004')!.childNodes[0];
-      var t2 = doc.getElementById('c001p0007')!.childNodes[0];
-      var ogRange = doc.createRange();
-      var cfi;
-      var newRange;
+      const t1 = doc.getElementById('c001p0004')!.childNodes[0];
+      const t2 = doc.getElementById('c001p0007')!.childNodes[0];
+      const ogRange = doc.createRange();
+      let cfi;
+      let newRange;
 
       ogRange.setStart(t1, 6);
 
@@ -494,11 +494,11 @@ describe('EpubCFI', function () {
     });
 
     it('get a range from a cfi with a range', function () {
-      var t1 = doc.getElementById('c001p0004')!.childNodes[0];
-      var t2 = doc.getElementById('c001p0007')!.childNodes[0];
-      var ogRange = doc.createRange();
-      var cfi;
-      var newRange;
+      const t1 = doc.getElementById('c001p0004')!.childNodes[0];
+      const t2 = doc.getElementById('c001p0007')!.childNodes[0];
+      const ogRange = doc.createRange();
+      let cfi;
+      let newRange;
 
       ogRange.setStart(t1, 6);
       ogRange.setEnd(t2, 27);
@@ -523,10 +523,10 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a range inside a highlight', function () {
-      var t1 = doc.getElementById('highlight-1')!.childNodes[0];
-      var ogRange = doc.createRange();
-      var cfi;
-      var newRange;
+      const t1 = doc.getElementById('highlight-1')!.childNodes[0];
+      const ogRange = doc.createRange();
+      let cfi;
+      let newRange;
 
       ogRange.setStart(t1, 6);
 
@@ -546,11 +546,11 @@ describe('EpubCFI', function () {
     });
 
     it('get a cfi from a range inside a highlight range', function () {
-      var t1 = doc.getElementById('highlight-2')!.childNodes[0];
-      var t2 = doc.getElementById('c001s0001')!.childNodes[1];
-      var ogRange = doc.createRange();
-      var cfi;
-      var newRange;
+      const t1 = doc.getElementById('highlight-2')!.childNodes[0];
+      const t2 = doc.getElementById('c001s0001')!.childNodes[1];
+      const ogRange = doc.createRange();
+      let cfi;
+      let newRange;
 
       ogRange.setStart(t1, 5);
       ogRange.setEnd(t2, 25);

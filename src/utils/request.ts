@@ -5,14 +5,14 @@ export type RequestMethod = (
   url: string,
   type?: string,
   withCredentials?: boolean,
-  headers?: { [key: string]: string },
+  headers?: Record<string, string>,
 ) => Promise<Blob | string | JSON | Document | XMLDocument>;
 
 function request(
   url: string,
   type?: string,
   withCredentials?: boolean,
-  headers?: { [key: string]: string },
+  headers?: Record<string, string>,
 ): Promise<Blob | string | JSON | Document | XMLDocument> {
   const supportsURL = typeof window != 'undefined' ? window.URL : false; // TODO: fallback for url if window isn't defined
   const BLOB_RESPONSE: XMLHttpRequestResponseType = supportsURL

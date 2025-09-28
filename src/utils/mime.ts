@@ -3,15 +3,9 @@
 edited down
  */
 
-interface MimeTable {
-  [key: string]: {
-    [key: string]: string | string[];
-  };
-}
+type MimeTable = Record<string, Record<string, string | string[]>>;
 
-interface MimeTypes {
-  [key: string]: string;
-}
+type MimeTypes = Record<string, string>;
 
 const table: MimeTable = {
   application: {

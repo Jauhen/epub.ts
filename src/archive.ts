@@ -11,7 +11,7 @@ import JSZip from 'jszip';
 
 class Archive {
   zip: JSZip | undefined;
-  urlCache: { [url: string]: string };
+  urlCache: Record<string, string>;
 
   constructor() {
     this.zip = undefined;

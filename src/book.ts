@@ -39,7 +39,7 @@ type InputType = (typeof INPUT_TYPE)[keyof typeof INPUT_TYPE];
 export interface BookOptions {
   requestMethod?: RequestMethod;
   requestCredentials?: boolean;
-  requestHeaders?: { [key: string]: string };
+  requestHeaders?: Record<string, string>;
   encoding?: boolean;
   replacements?: string;
   canonical?: (path: string) => string;
@@ -68,7 +68,7 @@ export interface BookOptions {
 export interface BookOptions {
   requestMethod?: RequestMethod;
   requestCredentials?: boolean;
-  requestHeaders?: { [key: string]: string };
+  requestHeaders?: Record<string, string>;
   encoding?: boolean;
   replacements?: string;
   canonical?: (path: string) => string;
@@ -557,7 +557,7 @@ class Book extends EventEmitter {
    * Set headers request should use
    * @param {object} headers
    */
-  setRequestHeaders(headers: { [key: string]: string }): void {
+  setRequestHeaders(headers: Record<string, string>): void {
     this.settings.requestHeaders = headers;
   }
 

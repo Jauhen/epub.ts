@@ -12,7 +12,7 @@ const COMMENT_NODE = 8;
 const DOCUMENT_NODE = 9;
 
 interface EpubCFISegment {
-  steps: Array<EpubCFIStep>;
+  steps: EpubCFIStep[];
   terminal: {
     offset: number | null;
     assertion: string;
@@ -27,7 +27,7 @@ interface EpubCFIStep {
 }
 
 interface EpubCFIComponent {
-  steps: Array<EpubCFIStep>;
+  steps: EpubCFIStep[];
   terminal: {
     offset: number | null;
     assertion: string;
@@ -288,7 +288,7 @@ class EpubCFI {
     assertion: string;
   } {
     let characterOffset: number | null = null;
-    let textLocationAssertion: string = '';
+    let textLocationAssertion = '';
     const assertion: RegExpMatchArray | null = termialStr.match(/\[(.*)\]/);
 
     if (assertion && assertion[1]) {
@@ -338,14 +338,14 @@ class EpubCFI {
     return splitStr[1] || '';
   }
 
-  joinSteps(steps: Array<EpubCFIStep>): string {
+  joinSteps(steps: EpubCFIStep[]): string {
     if (!steps) {
       return '';
     }
 
     return steps
       .map(function (part: EpubCFIStep): string {
-        let segment: string = '';
+        let segment = '';
 
         if (part.type === 'element') {
           segment += (part.index + 1) * 2;
@@ -365,7 +365,7 @@ class EpubCFI {
   }
 
   segmentString(segment: EpubCFIComponent): string {
-    let segmentString: string = '/';
+    let segmentString = '/';
 
     segmentString += this.joinSteps(segment.steps);
 
@@ -389,7 +389,7 @@ class EpubCFI {
    * @returns {string} epubcfi
    */
   toString() {
-    let cfiString: string = 'epubcfi(';
+    let cfiString = 'epubcfi(';
 
     cfiString += this.segmentString(this.base as EpubCFIComponent);
 
@@ -618,7 +618,7 @@ class EpubCFI {
     let startOffset: number = range.startOffset;
     let endOffset: number = range.endOffset;
 
-    let needsIgnoring: boolean = false;
+    let needsIgnoring = false;
 
     if (ignoreClass) {
       // Tell pathTo if / what to ignore
@@ -736,7 +736,7 @@ class EpubCFI {
     let parent: Node | null = null,
       previousSibling: Node | null,
       nextSibling: Node | null;
-    let isText: boolean = false;
+    let isText = false;
 
     if (anchor.nodeType === TEXT_NODE) {
       isText = true;
@@ -819,13 +819,13 @@ class EpubCFI {
     children: NodeList | HTMLCollection,
     nodeType: number,
     ignoreClass: string,
-  ): { [key: number]: number } {
-    const output: { [key: number]: number } = {};
-    let prevIndex: number = -1;
+  ): Record<number, number> {
+    const output: Record<number, number> = {};
+    let prevIndex = -1;
     let i: number,
       len: number = children.length;
     let currNodeType: number;
-    let prevNodeType: number = -1;
+    let prevNodeType = -1;
 
     for (i = 0; i < len; i++) {
       currNodeType = children[i].nodeType;
@@ -871,7 +871,7 @@ class EpubCFI {
   filteredPosition(anchor: Node, ignoreClass: string): number {
     let children: NodeList | HTMLCollection,
       index: number,
-      map: { [key: number]: number };
+      map: Record<number, number>;
 
     if (anchor.nodeType === ELEMENT_NODE) {
       children = anchor.parentNode!.children;
@@ -891,7 +891,7 @@ class EpubCFI {
     return map[index];
   }
 
-  stepsToXpath(steps: Array<EpubCFIStep>): string {
+  stepsToXpath(steps: EpubCFIStep[]): string {
     const xpath: string[] = ['.', '*'];
 
     steps.forEach(function (step: EpubCFIStep): void {
@@ -924,7 +924,7 @@ class EpubCFI {
     container = startContainerParent.childNodes[lastStep.index];
   }
   */
-  stepsToQuerySelector(steps: Array<EpubCFIStep>): string {
+  stepsToQuerySelector(steps: EpubCFIStep[]): string {
     const query: string[] = ['html'];
 
     steps.forEach(function (step: EpubCFIStep): void {
@@ -943,7 +943,7 @@ class EpubCFI {
     return query.join('>');
   }
 
-  textNodes(container: Node, ignoreClass: string): Array<Node> {
+  textNodes(container: Node, ignoreClass: string): Node[] {
     return Array.prototype.slice
       .call(container.childNodes)
       .filter(function (node: Node): boolean {
@@ -960,9 +960,9 @@ class EpubCFI {
   }
 
   walkToNode(
-    steps: Array<EpubCFIStep>,
+    steps: EpubCFIStep[],
     _doc?: Document,
-    ignoreClass: string = '',
+    ignoreClass = '',
   ): Node | null {
     const doc: Document = _doc || document;
     let container: Element | null = doc.documentElement;
@@ -1000,7 +1000,7 @@ class EpubCFI {
   }
 
   findNode(
-    steps: Array<EpubCFIStep>,
+    steps: EpubCFIStep[],
     _doc?: Document,
     ignoreClass?: string,
   ): Node | null {
@@ -1027,10 +1027,10 @@ class EpubCFI {
   }
 
   fixMiss(
-    steps: Array<EpubCFIStep>,
+    steps: EpubCFIStep[],
     offset: number | null,
     _doc?: Document,
-    ignoreClass: string = '',
+    ignoreClass = '',
   ): any {
     let container: Node | null = this.findNode(
       steps.slice(0, -1),
@@ -1038,7 +1038,7 @@ class EpubCFI {
       ignoreClass,
     );
     const children: NodeList = container!.childNodes;
-    const map: { [key: number]: number } = this.normalizedMap(
+    const map: Record<number, number> = this.normalizedMap(
       children,
       TEXT_NODE,
       ignoreClass,
@@ -1086,7 +1086,7 @@ class EpubCFI {
       startContainer: Node | null,
       endContainer: Node | null = null;
     const cfi: EpubCFI = this;
-    let startSteps: Array<EpubCFIStep>, endSteps: Array<EpubCFIStep>;
+    let startSteps: EpubCFIStep[], endSteps: EpubCFIStep[];
     const needsIgnoring: boolean = ignoreClass
       ? doc.querySelector('.' + ignoreClass) != null
       : false;

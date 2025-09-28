@@ -1,6 +1,4 @@
-export interface HooksObject {
-  [key: string]: Hook;
-}
+export type HooksObject = Record<string, Hook>;
 
 /**
  * Hooks allow for injecting functions that must all complete in order before finishing
@@ -22,7 +20,7 @@ class Hook {
    * Adds a function to be run before a hook completes
    * @example this.content.register(function(){...});
    */
-  register(funcOrArr: Function | Array<Function>): void {
+  register(funcOrArr: Function | Function[]): void {
     if (typeof funcOrArr === 'function') {
       this.hooks.push(funcOrArr);
     } else {
@@ -75,8 +73,8 @@ class Hook {
   }
 
   // Adds a function to be run before a hook completes
-  list(): Array<any> {
-    return this.hooks as Array<any>;
+  list(): any[] {
+    return this.hooks as any[];
   }
 
   clear(): void {

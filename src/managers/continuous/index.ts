@@ -51,17 +51,17 @@ interface ManagerOptions {
 }
 
 class ContinuousViewManager extends DefaultViewManager {
-  public scrollTop: number = 0;
-  public scrollLeft: number = 0;
+  public scrollTop = 0;
+  public scrollLeft = 0;
   public trimTimeout?: NodeJS.Timeout;
   public snapper?: any;
   public tick?: any;
-  public scrollDeltaVert: number = 0;
-  public scrollDeltaHorz: number = 0;
+  public scrollDeltaVert = 0;
+  public scrollDeltaHorz = 0;
   public _scrolled?: any;
-  public didScroll: boolean = false;
-  public prevScrollTop: number = 0;
-  public prevScrollLeft: number = 0;
+  public didScroll = false;
+  public prevScrollTop = 0;
+  public prevScrollLeft = 0;
   public scrollTimeout?: NodeJS.Timeout;
 
   constructor(options: ManagerOptions) {
@@ -648,7 +648,7 @@ class ContinuousViewManager extends DefaultViewManager {
     return Promise.resolve();
   }
 
-  updateFlow(flow: string, defaultScrolledOverflow: string = 'scroll'): void {
+  updateFlow(flow: string, defaultScrolledOverflow = 'scroll'): void {
     if (this.rendered && this.snapper) {
       this.snapper.destroy();
       this.snapper = undefined;

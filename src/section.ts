@@ -28,7 +28,7 @@ export interface SpineItem {
   href?: string;
   url?: string;
   canonical?: string;
-  properties?: Array<string>;
+  properties?: string[];
   linear?: string;
   next?: () => SpineItem;
   prev?: () => SpineItem;
@@ -42,7 +42,7 @@ export interface SpineItem {
 export class Section {
   idref: string;
   linear: boolean;
-  properties: Array<string>;
+  properties: string[];
   index: number;
   href?: string;
   url?: string;
@@ -172,9 +172,9 @@ export class Section {
    * @param  {string} _query The query string to find
    * @return {object[]} A list of matches, with form {cfi, excerpt}
    */
-  find(_query: string): Array<{ cfi: string; excerpt: string }> {
+  find(_query: string): { cfi: string; excerpt: string }[] {
     const section = this;
-    const matches: Array<{ cfi: string; excerpt: string }> = [];
+    const matches: { cfi: string; excerpt: string }[] = [];
     const query = _query.toLowerCase();
     const limit = 150;
     if (!section.document) return matches;
@@ -216,16 +216,16 @@ export class Section {
    */
   search(
     _query: string,
-    maxSeqEle: number = 5,
-  ): Array<{ cfi: string; excerpt: string }> {
+    maxSeqEle = 5,
+  ): { cfi: string; excerpt: string }[] {
     if (typeof document.createTreeWalker === 'undefined' || !this.document) {
       return this.find(_query);
     }
-    const matches: Array<{ cfi: string; excerpt: string }> = [];
+    const matches: { cfi: string; excerpt: string }[] = [];
     const excerptLimit = 150;
     const section = this;
     const query = _query.toLowerCase();
-    const search = function (nodeList: Array<Text>) {
+    const search = function (nodeList: Text[]) {
       const textWithCase = nodeList.reduce(
         (acc, current) => acc + (current.textContent || ''),
         '',
@@ -281,7 +281,7 @@ export class Section {
       NodeFilter.SHOW_TEXT,
     );
     let node: Text | null;
-    let nodeList: Array<Text> = [];
+    let nodeList: Text[] = [];
     while ((node = treeWalker.nextNode() as Text | null)) {
       nodeList.push(node);
       if (nodeList.length === maxSeqEle) {

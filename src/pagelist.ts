@@ -22,9 +22,9 @@ class Pagelist {
   pages: number[] = [];
   locations: string[] = [];
   epubcfi: EpubCFI;
-  firstPage: number = 0;
-  lastPage: number = 0;
-  totalPages: number = 0;
+  firstPage = 0;
+  lastPage = 0;
+  totalPages = 0;
   toc?: any;
   ncx?: any;
   pageList?: PageListItem[];

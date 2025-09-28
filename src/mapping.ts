@@ -29,7 +29,7 @@ class Mapping {
     layout: any,
     direction?: string,
     axis?: string,
-    dev: boolean = false,
+    dev = false,
   ) {
     this.layout = layout;
     this.horizontal = axis === 'horizontal' ? true : false;
@@ -410,7 +410,7 @@ class Mapping {
   private splitTextNodeIntoRanges(
     node: Node,
     _splitter?: string,
-  ): Array<Range> {
+  ): Range[] {
     const ranges: Range[] = [];
     const textContent = node.textContent || '';
     const text = textContent.trim();

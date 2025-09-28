@@ -300,7 +300,7 @@ class Stage {
 
   addStyleRules(
     selector: string,
-    rulesArray: Array<{ [key: string]: string }>,
+    rulesArray: Record<string, string>[],
   ): void {
     const scope = '#' + this.id + ' ';
     let rules = '';
@@ -309,7 +309,7 @@ class Stage {
       this.sheet = this.getSheet();
     }
 
-    rulesArray.forEach(function (set: { [key: string]: string }) {
+    rulesArray.forEach(function (set: Record<string, string>) {
       for (const prop in set) {
         if (set.hasOwnProperty(prop)) {
           rules += prop + ':' + set[prop] + ';';

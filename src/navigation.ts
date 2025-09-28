@@ -4,7 +4,7 @@ export interface NavItem {
   id: string;
   href: string;
   label: string;
-  subitems?: Array<NavItem>;
+  subitems?: NavItem[];
   parent?: string;
 }
 
@@ -20,11 +20,11 @@ export interface LandmarkItem {
  */
 class Navigation {
   toc: NavItem[] = [];
-  tocByHref: { [href: string]: number } = {};
-  tocById: { [id: string]: number } = {};
+  tocByHref: Record<string, number> = {};
+  tocById: Record<string, number> = {};
   landmarks: LandmarkItem[] = [];
-  landmarksByType: { [type: string]: number } = {};
-  length: number = 0;
+  landmarksByType: Record<string, number> = {};
+  length = 0;
 
   constructor(xml?: XMLDocument) {
     if (xml) {
@@ -271,7 +271,7 @@ class Navigation {
   private parseNcx(tocXml: XMLDocument): NavItem[] {
     const navPoints = qsa(tocXml, 'navPoint');
     const length = navPoints.length;
-    const toc: { [id: string]: NavItem } = {};
+    const toc: Record<string, NavItem> = {};
     const list: NavItem[] = [];
     if (!navPoints || length === 0) return list;
     for (let i = 0; i < length; ++i) {

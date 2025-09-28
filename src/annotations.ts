@@ -16,8 +16,8 @@ class Annotations {
   private highlights: Annotation[];
   private underlines: Annotation[];
   private marks: Annotation[];
-  private _annotations: { [hash: string]: Annotation };
-  private _annotationsBySectionIndex: { [sectionIndex: number]: string[] };
+  private _annotations: Record<string, Annotation>;
+  private _annotationsBySectionIndex: Record<number, string[]>;
 
   constructor(rendition: Rendition) {
     this.rendition = rendition;
@@ -186,7 +186,7 @@ class Annotations {
   /**
    * iterate over annotations in the store
    */
-  each(): Array<Annotation> {
+  each(): Annotation[] {
     return Object.values(this._annotations);
   }
 

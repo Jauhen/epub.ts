@@ -1133,7 +1133,7 @@ class DefaultViewManager extends EventEmitter implements Manager {
     }
   }
 
-  updateFlow(flow: any, defaultScrolledOverflow: string = 'auto'): void {
+  updateFlow(flow: any, defaultScrolledOverflow = 'auto'): void {
     const isPaginated = flow === 'paginated' || flow === 'auto';
 
     this.isPaginated = isPaginated;

@@ -8,10 +8,10 @@ describe('Locations', async () => {
       const chapter = await (
         await fetch('./test/fixtures/locations.xhtml')
       ).text();
-      var doc = core.parse(chapter, 'application/xhtml+xml', true);
-      var contents = doc.documentElement;
-      var locations = new Locations({});
-      var result = locations.parse(contents, '/6/4[chap01ref]', 100);
+      const doc = core.parse(chapter, 'application/xhtml+xml', true);
+      const contents = doc.documentElement;
+      const locations = new Locations({});
+      const result = locations.parse(contents, '/6/4[chap01ref]', 100);
       expect(result.length).to.equal(15);
     });
 
@@ -19,11 +19,11 @@ describe('Locations', async () => {
       const chapter = await (
         await fetch('./test/fixtures/locations.xhtml')
       ).text();
-      var doc = core.parse(chapter, 'application/xhtml+xml', true);
-      var contents = doc.documentElement;
+      const doc = core.parse(chapter, 'application/xhtml+xml', true);
+      const contents = doc.documentElement;
 
-      var locations = new Locations({});
-      var result = locations.parse(contents, '/6/4[chap01ref]', 100);
+      const locations = new Locations({});
+      const result = locations.parse(contents, '/6/4[chap01ref]', 100);
       expect(result.length).to.equal(15);
     });
   });

@@ -3,7 +3,7 @@ import { type SpineItem } from './section';
 
 export interface PackagingObject {
   metadata: PackagingMetadataObject;
-  spine: Array<SpineItem>;
+  spine: SpineItem[];
   manifest: PackagingManifestObject;
   navPath: string;
   ncxPath: string;
@@ -34,13 +34,11 @@ export interface PackagingMetadataObject {
 export interface PackagingManifestItem {
   href: string;
   type: string;
-  properties: Array<string>;
+  properties: string[];
   overlay: string;
 }
 
-export interface PackagingManifestObject {
-  [key: string]: PackagingManifestItem;
-}
+export type PackagingManifestObject = Record<string, PackagingManifestItem>;
 
 /**
  * Open Packaging Format Parser
@@ -53,7 +51,7 @@ class Packaging {
   ncxPath: string;
   coverPath: string;
   spineNodeIndex: number;
-  spine: Array<SpineItem>;
+  spine: SpineItem[];
   metadata: PackagingMetadataObject;
   // Optionally store toc if needed by load()
   toc?: XMLDocument;
@@ -229,7 +227,7 @@ class Packaging {
   private parseSpine(
     spineXml: Node,
     manifest: PackagingManifestObject,
-  ): Array<SpineItem> {
+  ): SpineItem[] {
     const spine: SpineItem[] = [];
     const selected = qsa(spineXml as Element, 'itemref');
     const items = Array.prototype.slice.call(selected) as Element[];

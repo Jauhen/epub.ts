@@ -703,10 +703,10 @@ class IframeView extends EventEmitter implements View {
 
   highlight(
     cfiRange: string,
-    data: { [key: string]: any } = {},
+    data: Record<string, any> = {},
     cb?: EventListener,
-    className: string = 'epubjs-hl',
-    styles: { [key: string]: any } = {},
+    className = 'epubjs-hl',
+    styles: Record<string, any> = {},
   ): Highlight | undefined {
     if (!this.contents) {
       return;
@@ -744,10 +744,10 @@ class IframeView extends EventEmitter implements View {
 
   underline(
     cfiRange: string,
-    data: { [key: string]: any } = {},
+    data: Record<string, any> = {},
     cb?: EventListener,
-    className: string = 'epubjs-ul',
-    styles: { [key: string]: any } = {},
+    className = 'epubjs-ul',
+    styles: Record<string, any> = {},
   ): Underline | undefined {
     if (!this.contents) {
       return;
@@ -789,7 +789,7 @@ class IframeView extends EventEmitter implements View {
 
   mark(
     cfiRange: string,
-    data: { [key: string]: any } = {},
+    data: Record<string, any> = {},
     cb?: EventListener,
   ): any {
     if (!this.contents) {

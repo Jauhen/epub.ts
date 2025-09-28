@@ -17,8 +17,8 @@ class Locations extends EventEmitter {
   pause: number | undefined;
   q: any;
   epubcfi: EpubCFI | undefined;
-  _locations: Array<string> | undefined;
-  _locationsWords: Array<any> | undefined;
+  _locations: string[] | undefined;
+  _locationsWords: any[] | undefined;
   total: number | undefined;
   break: number | undefined;
   _current: number | undefined;
@@ -54,7 +54,7 @@ class Locations extends EventEmitter {
    * @param  {int} chars how many chars to split on
    * @return {Promise<Array<string>>} locations
    */
-  generate(chars: number): Promise<Array<string>> {
+  generate(chars: number): Promise<string[]> {
     if (chars) {
       this.break = chars;
     }
@@ -69,7 +69,7 @@ class Locations extends EventEmitter {
       if (this._currentCfi) {
         this.currentLocation = this._currentCfi;
       }
-      return this._locations as Array<string>;
+      return this._locations as string[];
     });
   }
 
@@ -87,7 +87,7 @@ class Locations extends EventEmitter {
     };
   }
 
-  process(section: any): Promise<Array<string>> {
+  process(section: any): Promise<string[]> {
     return section.load(this.request).then((contents: any) => {
       const completed = defer();
       const locations = this.parse(contents, section.cfiBase);
@@ -101,8 +101,8 @@ class Locations extends EventEmitter {
     });
   }
 
-  parse(contents: Node, cfiBase: string, chars?: number): Array<string> {
-    const locations: Array<string> = [];
+  parse(contents: Node, cfiBase: string, chars?: number): string[] {
+    const locations: string[] = [];
     let range: any;
     const doc = (contents as any).ownerDocument;
     const body = qs(doc, 'body');
@@ -259,9 +259,9 @@ class Locations extends EventEmitter {
     section: any,
     wordCount: number,
     startCfi: any,
-  ): Array<{ cfi: string; wordCount: number }> {
+  ): { cfi: string; wordCount: number }[] {
     const cfiBase = section.cfiBase;
-    const locations: Array<{ cfi: string; wordCount: number }> = [];
+    const locations: { cfi: string; wordCount: number }[] = [];
     const doc = contents.ownerDocument;
     const body = qs(doc, 'body');
     let prev: any;
@@ -385,7 +385,7 @@ class Locations extends EventEmitter {
    * @return {EpubCFI} cfi
    */
   cfiFromLocation(loc: number): string {
-    let cfi: string = '';
+    let cfi = '';
     if (typeof loc !== 'number') {
       loc = parseInt(loc as any);
     }
@@ -420,14 +420,14 @@ class Locations extends EventEmitter {
    * Load locations from JSON
    * @param {json} locations
    */
-  load(locations: string | Array<string>): Array<string> {
+  load(locations: string | string[]): string[] {
     if (typeof locations === 'string') {
       this._locations = JSON.parse(locations);
     } else {
       this._locations = locations;
     }
     this.total = (this._locations?.length || 0) - 1;
-    return this._locations as Array<string>;
+    return this._locations as string[];
   }
 
   /**

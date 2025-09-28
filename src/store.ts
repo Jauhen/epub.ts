@@ -91,7 +91,7 @@ class Store extends EventEmitter {
    * @param  {boolean} [force] force resaving resources
    * @return {Promise<object>} store objects
    */
-  add(resources: Resources, force?: boolean): Promise<Array<object>> {
+  add(resources: Resources, force?: boolean): Promise<object[]> {
     const mapped = resources.resources.map((item: any) => {
       const { href } = item;
       const url = this.resolver(href);

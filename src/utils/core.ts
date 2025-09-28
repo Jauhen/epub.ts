@@ -179,7 +179,7 @@ export function extend(target: object): object {
  */
 export function insert(
   item: any,
-  array: Array<any>,
+  array: any[],
   compareFunction: Function,
 ): number {
   const location = locationOf(
@@ -206,7 +206,7 @@ export function insert(
  */
 export function locationOf(
   item: any,
-  array: Array<any>,
+  array: any[],
   compareFunction: Function,
   _start?: number,
   _end?: number,
@@ -253,7 +253,7 @@ export function locationOf(
  */
 export function indexOfSorted(
   item: any,
-  array: Array<any>,
+  array: any[],
   compareFunction: Function,
   _start?: number,
   _end?: number,
@@ -740,11 +740,11 @@ export function blob2base64(blob: Blob): Promise<string | ArrayBuffer | null> {
   });
 }
 
-export type Defer<T = any> = {
+export interface Defer<T = any> {
   promise: Promise<T>;
   resolve: (value: T | PromiseLike<T>) => void;
   reject: (reason?: any) => void;
-};
+}
 
 /**
  * Creates a new pending promise and provides methods to resolve or reject it.

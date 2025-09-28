@@ -15,11 +15,11 @@ import type { PackagingManifestObject } from './packaging';
 
 class Spine {
   spineItems: Section[] = [];
-  spineByHref: { [key: string]: number } = {};
-  spineById: { [key: string]: number } = {};
+  spineByHref: Record<string, number> = {};
+  spineById: Record<string, number> = {};
   hooks: HooksObject;
   epubcfi: EpubCFI;
-  loaded: boolean = false;
+  loaded = false;
   items: any[] = [];
   manifest: PackagingManifestObject | undefined;
   spineNodeIndex: number | undefined;

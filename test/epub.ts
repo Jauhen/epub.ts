@@ -3,7 +3,7 @@ import { expect } from '@esm-bundle/chai';
 
 describe('ePub', function () {
   it('should open a epub', async () => {
-    var book = ePub('/test/fixtures/alice/OPS/package.opf');
+    const book = ePub('/test/fixtures/alice/OPS/package.opf');
 
     await book.opened;
     expect(book.isOpen).to.equal(true, 'book is opened');
@@ -14,7 +14,7 @@ describe('ePub', function () {
   });
 
   it('should open a archived epub', async () => {
-    var book = ePub('/test/fixtures/alice.epub');
+    const book = ePub('/test/fixtures/alice.epub');
 
     // assert(typeof (JSZip) !== "undefined", "JSZip is present" );
 

@@ -9,15 +9,13 @@ import type Contents from './contents';
  */
 class Themes {
   private rendition: Rendition;
-  private _themes: {
-    [name: string]: {
+  private _themes: Record<string, {
       rules?: object;
       url?: string;
       serialized?: string;
       injected?: boolean;
-    };
-  };
-  private _overrides: { [name: string]: { value: string; priority: boolean } };
+    }>;
+  private _overrides: Record<string, { value: string; priority: boolean }>;
   private _current: string;
   private _injected: string[];
 

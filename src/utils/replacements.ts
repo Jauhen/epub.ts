@@ -1,6 +1,6 @@
+import type Section from '../section';
 import { qs } from './core';
 import Url from './url';
-import type Section from '../section';
 
 export function replaceBase(doc: Document, section?: Section): void {
   if (!doc) {

@@ -25,12 +25,7 @@ class Mapping {
   public direction: string;
   private _dev: boolean;
 
-  constructor(
-    layout: any,
-    direction?: string,
-    axis?: string,
-    dev = false,
-  ) {
+  constructor(layout: any, direction?: string, axis?: string, dev = false) {
     this.layout = layout;
     this.horizontal = axis === 'horizontal' ? true : false;
     this.direction = direction || 'ltr';
@@ -407,10 +402,7 @@ class Mapping {
    * @param {string} [_splitter] what to split on
    * @return {Range[]}
    */
-  private splitTextNodeIntoRanges(
-    node: Node,
-    _splitter?: string,
-  ): Range[] {
+  private splitTextNodeIntoRanges(node: Node, _splitter?: string): Range[] {
     const ranges: Range[] = [];
     const textContent = node.textContent || '';
     const text = textContent.trim();

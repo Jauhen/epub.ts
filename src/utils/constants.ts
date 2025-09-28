@@ -1,4 +1,4 @@
-export const EPUBJS_VERSION = '0.3.1';
+export const EPUBJS_VERSION = '0.4.0';
 
 // Dom events to listen for
 export const DOM_EVENTS = [

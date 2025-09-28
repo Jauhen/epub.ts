@@ -1,19 +1,11 @@
 import EventEmitter from 'events';
-import {
-  extend,
-  borders,
-  uuid,
-  isNumber,
-  bounds,
-  defer,
-  qs,
-  parse,
-} from '../../utils/core';
-import EpubCFI from '../../epubcfi';
+
 import Contents from '../../contents';
-import { EVENTS } from '../../utils/constants';
-import Section from '../../section';
+import EpubCFI from '../../epubcfi';
 import Layout from '../../layout';
+import Section from '../../section';
+import { EVENTS } from '../../utils/constants';
+import { borders, bounds, isNumber, parse, qs, uuid } from '../../utils/core';
 import type View from '../view';
 
 interface InlineViewSettings {

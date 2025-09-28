@@ -1,8 +1,9 @@
+import JSZip from 'jszip';
+
 import { defer, isXml, parse } from './utils/core';
-import request from './utils/request';
 import mime from './utils/mime';
 import Path from './utils/path';
-import JSZip from 'jszip';
+import request from './utils/request';
 
 /**
  * Handles Unzipping a requesting files from an Epub Archive

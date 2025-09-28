@@ -1,11 +1,7 @@
-import {
-  extend,
-  defer,
-  requestAnimationFrame,
-  prefixed,
-} from '../../utils/core';
-import { EVENTS, DOM_EVENTS } from '../../utils/constants';
 import EventEmitter from 'events';
+
+import { EVENTS } from '../../utils/constants';
+import { defer } from '../../utils/core';
 
 // easing equations from https://github.com/danro/easing-js/blob/master/easing.js
 const PI_D2 = Math.PI / 2;

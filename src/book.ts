@@ -1,26 +1,27 @@
 import EventEmitter from 'events';
-import { defer, Defer } from './utils/core';
-import Url from './utils/url';
-import Path from './utils/path';
-import Spine from './spine';
-import Locations from './locations';
+import JSZip from 'jszip';
+
+import Archive from './archive';
 import Container from './container';
+import DisplayOptions from './displayoptions';
+import EpubCFI from './epubcfi';
+import Locations from './locations';
+import Navigation from './navigation';
 import Packaging, {
   PackagingManifestObject,
   PackagingMetadataObject,
 } from './packaging';
-import Navigation from './navigation';
-import Resources from './resources';
 import PageList from './pagelist';
 import Rendition, { RenditionOptions } from './rendition';
-import Archive from './archive';
-import request, { type RequestMethod } from './utils/request';
-import EpubCFI from './epubcfi';
-import Store from './store';
-import DisplayOptions from './displayoptions';
-import { EPUBJS_VERSION, EVENTS } from './utils/constants';
+import Resources from './resources';
 import Section from './section';
-import JSZip from 'jszip';
+import Spine from './spine';
+import Store from './store';
+import { EPUBJS_VERSION, EVENTS } from './utils/constants';
+import { defer, Defer } from './utils/core';
+import Path from './utils/path';
+import request, { type RequestMethod } from './utils/request';
+import Url from './utils/url';
 
 const CONTAINER_PATH = 'META-INF/container.xml';
 const IBOOKS_DISPLAY_OPTIONS_PATH =

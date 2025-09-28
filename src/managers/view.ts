@@ -1,4 +1,3 @@
-import Section from '../section';
 import Contents from '../contents';
 import Layout from '../layout';
 

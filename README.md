@@ -1,4 +1,6 @@
-# Epub.js v0.3
+# Epub.ts v0.4
+
+Typescript version of Epub.js with future improvements.
 
 ![FuturePress Views](http://fchasen.com/futurepress/fp.png)
 
@@ -20,12 +22,6 @@ More specifically, the EPUB schema standardizes the table of contents, provides 
 
 ## Getting Started
 
-If using archived `.epub` files include JSZip (this must precede inclusion of epub.js):
-
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-```
-
 Get the minified code from the build folder:
 
 ```html
@@ -42,9 +38,9 @@ Create the new ePub, and then render it to that element:
 
 ```html
 <script>
-  var book = ePub("url/to/book/package.opf");
-  var rendition = book.renderTo("area", {width: 600, height: 400});
-  var displayed = rendition.display();
+  const book = ePub("url/to/book/package.opf");
+  const rendition = book.renderTo("area", {width: 600, height: 400});
+  const displayed = rendition.display();
 </script>
 ```
 
@@ -98,7 +94,7 @@ If a trusted ePub contains interactivity, it can be enabled by passing `allowScr
 
 ```html
 <script>
-  var rendition = book.renderTo("area", {
+  cl st rendition = book.renderTo("area", {
     width: 600,
     height: 400,
     allowScriptedContent: true
@@ -120,13 +116,13 @@ install [node.js](http://nodejs.org/)
 
 Then install the project dependences with npm
 
-```javascript
+```shell
 npm install
 ```
 
 You can run the reader locally with the command
 
-```javascript
+```shell
 npm start
 ```
 
@@ -142,26 +138,36 @@ npm start
 
 ## Testing
 
-Test can be run by Karma from NPM
+Test can be run by Web Test Runner from NPM
 
-```js
+```shell
 npm test
+```
+
+To update screen diffs run
+```shell
+npm run test:update
+```
+
+To see test coverage run
+```shell
+npm run test:coverage
 ```
 
 ## Building for Distribution
 
-Builds are concatenated and minified using [webpack](https://webpack.js.org/) and [babel](https://babeljs.io/)
+Builds are concatenated and minified using [metro](https://metrobundler.dev/)
 
 To generate a new build run
 
-```javascript
-npm run prepare
+```shell
+npm run build
 ```
 
-or to continuously build run
+or to produce minified version
 
-```javascript
-npm run watch
+```shell
+npm run build:minify
 ```
 
 ## Hooks
@@ -176,14 +182,13 @@ Example hook:
 
 ```javascript
 rendition.hooks.content.register(function(contents, view) {
+  const elements = 
+      contents.document.querySelectorAll('[video]');
+  const items = Array.prototype.slice.call(elements);
 
-    var elements = contents.document.querySelectorAll('[video]');
-    var items = Array.prototype.slice.call(elements);
-
-    items.forEach(function(item){
-      // do something with the video item
-    });
-
+  items.forEach(function(item){
+    // do something with the video item
+  });
 })
 ```
 

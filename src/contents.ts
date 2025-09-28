@@ -1,9 +1,10 @@
 import EventEmitter from 'events';
-import { isNumber, prefixed, borders, defaults } from './utils/core';
+
 import EpubCFI from './epubcfi';
 import Mapping from './mapping';
+import { DOM_EVENTS, EPUBJS_VERSION, EVENTS } from './utils/constants';
+import { borders, defaults, isNumber, prefixed } from './utils/core';
 import { replaceLinks } from './utils/replacements';
-import { EPUBJS_VERSION, EVENTS, DOM_EVENTS } from './utils/constants';
 
 interface ViewportSettings {
   width?: string;

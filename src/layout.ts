@@ -1,7 +1,7 @@
-import { extend } from './utils/core';
-import { EVENTS } from './utils/constants';
 import EventEmitter from 'events';
+
 import type Contents from './contents';
+import { EVENTS } from './utils/constants';
 
 /**
  * Figures out the CSS values to apply for a layout

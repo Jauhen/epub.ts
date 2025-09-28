@@ -1,6 +1,7 @@
+import { expect } from '@esm-bundle/chai';
+
 import Locations from '../src/locations';
 import * as core from '../src/utils/core';
-import { expect } from '@esm-bundle/chai';
 
 describe('Locations', async () => {
   describe('#parse', async () => {

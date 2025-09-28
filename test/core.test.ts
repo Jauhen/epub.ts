@@ -1,6 +1,7 @@
-import Url from '../src/utils/url';
-import Path from '../src/utils/path';
 import { expect } from '@esm-bundle/chai';
+
+import Path from '../src/utils/path';
+import Url from '../src/utils/url';
 
 describe('Core', function () {
   describe('Url', function () {
@@ -130,7 +131,9 @@ describe('Core', function () {
     describe('#isDirectory()', function () {
       it('should recognize a directory', function () {
         const directory = Path.prototype.isDirectory('/fred/chasen/');
-        const notDirectory = Path.prototype.isDirectory('/fred/chasen/derf.html');
+        const notDirectory = Path.prototype.isDirectory(
+          '/fred/chasen/derf.html',
+        );
 
         expect(directory).to.equal(true, '/fred/chasen/ is a directory');
         expect(notDirectory).to.equal(

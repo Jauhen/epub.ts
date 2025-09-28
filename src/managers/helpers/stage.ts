@@ -1,11 +1,6 @@
-import {
-  uuid,
-  isNumber,
-  isElement,
-  windowBounds,
-  extend,
-} from '../../utils/core';
 import throttle from 'lodash/throttle';
+
+import { isElement, isNumber, uuid, windowBounds } from '../../utils/core';
 
 class Stage {
   settings: any;
@@ -298,10 +293,7 @@ class Stage {
     return style.sheet;
   }
 
-  addStyleRules(
-    selector: string,
-    rulesArray: Record<string, string>[],
-  ): void {
+  addStyleRules(selector: string, rulesArray: Record<string, string>[]): void {
     const scope = '#' + this.id + ' ';
     let rules = '';
 

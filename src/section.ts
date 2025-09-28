@@ -1,12 +1,11 @@
-import { defer } from './utils/core';
-import EpubCFI from './epubcfi';
-import Hook from './utils/hook';
-import { sprint } from './utils/core';
-import { replaceBase } from './utils/replacements';
-import Request from './utils/request';
 import { DOMParser as XMLDOMSerializer } from '@xmldom/xmldom';
 
+import EpubCFI from './epubcfi';
+import { defer, sprint } from './utils/core';
+import Hook from './utils/hook';
 import type { HooksObject } from './utils/hook';
+import { replaceBase } from './utils/replacements';
+import Request from './utils/request';
 
 export interface GlobalLayout {
   layout: string;
@@ -214,10 +213,7 @@ export class Section {
    * @param  {int} maxSeqEle The maximum number of Element that are combined for search, default value is 5.
    * @return {object[]} A list of matches, with form {cfi, excerpt}
    */
-  search(
-    _query: string,
-    maxSeqEle = 5,
-  ): { cfi: string; excerpt: string }[] {
+  search(_query: string, maxSeqEle = 5): { cfi: string; excerpt: string }[] {
     if (typeof document.createTreeWalker === 'undefined' || !this.document) {
       return this.find(_query);
     }

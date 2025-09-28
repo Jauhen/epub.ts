@@ -1,23 +1,19 @@
 import EventEmitter from 'events';
-import { extend, defer, isFloat } from './utils/core';
-import Hook from './utils/hook';
-import EpubCFI from './epubcfi';
-import Queue from './utils/queue';
-import Layout from './layout';
-// import Mapping from "./mapping";
-import Themes from './themes';
-import Contents from './contents';
+
 import Annotations from './annotations';
-import { EVENTS, DOM_EVENTS } from './utils/constants';
-
-// Default Views
-import IframeView from './managers/views/iframe';
-
+import type Book from './book';
+import EpubCFI from './epubcfi';
+import Layout from './layout';
+import ContinuousViewManager from './managers/continuous/index';
 // Default View Managers
 import DefaultViewManager from './managers/default/index';
-import ContinuousViewManager from './managers/continuous/index';
-
-import type Book from './book';
+// Default Views
+import IframeView from './managers/views/iframe';
+import Themes from './themes';
+import { DOM_EVENTS, EVENTS } from './utils/constants';
+import { defer, extend, isFloat } from './utils/core';
+import Hook from './utils/hook';
+import Queue from './utils/queue';
 
 export interface RenditionOptions {
   width?: number | string;

@@ -1,6 +1,6 @@
-import Url from './utils/url';
-import type Rendition from './rendition';
 import type Contents from './contents';
+import type Rendition from './rendition';
+import Url from './utils/url';
 
 /**
  * Themes to apply to displayed content
@@ -9,12 +9,15 @@ import type Contents from './contents';
  */
 class Themes {
   private rendition: Rendition;
-  private _themes: Record<string, {
+  private _themes: Record<
+    string,
+    {
       rules?: object;
       url?: string;
       serialized?: string;
       injected?: boolean;
-    }>;
+    }
+  >;
   private _overrides: Record<string, { value: string; priority: boolean }>;
   private _current: string;
   private _injected: string[];

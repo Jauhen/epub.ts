@@ -1,8 +1,9 @@
-import { extend, defer, requestAnimationFrame } from '../../utils/core';
+import debounce from 'lodash/debounce';
+
+import { EVENTS } from '../../utils/constants';
+import { defer, requestAnimationFrame } from '../../utils/core';
 import DefaultViewManager from '../default';
 import Snap from '../helpers/snap';
-import { EVENTS } from '../../utils/constants';
-import debounce from 'lodash/debounce';
 
 // Type imports
 interface Section {

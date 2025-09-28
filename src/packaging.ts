@@ -1,5 +1,5 @@
-import { qs, qsa, qsp, indexOfElementNode } from './utils/core';
 import { type SpineItem } from './section';
+import { indexOfElementNode, qs, qsa, qsp } from './utils/core';
 
 export interface PackagingObject {
   metadata: PackagingMetadataObject;

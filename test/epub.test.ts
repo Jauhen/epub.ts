@@ -1,5 +1,6 @@
-import ePub from '../src/epub';
 import { expect } from '@esm-bundle/chai';
+
+import ePub from '../src/epub';
 
 describe('ePub', function () {
   it('should open a epub', async () => {

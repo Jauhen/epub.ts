@@ -1,10 +1,11 @@
-import { isXml, parse } from './utils/core';
-import httpRequest from './utils/request';
-import mime from './utils/mime';
-import Path from './utils/path';
 import EventEmitter from 'events';
 import localForage from 'localforage';
+
 import Resources from './resources';
+import { isXml, parse } from './utils/core';
+import mime from './utils/mime';
+import Path from './utils/path';
+import httpRequest from './utils/request';
 
 /**
  * Handles saving and requesting files from local storage

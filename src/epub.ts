@@ -1,13 +1,12 @@
 import Book, { type BookOptions } from './book';
-import Rendition from './rendition';
-import CFI from './epubcfi';
 import Contents from './contents';
-import * as utils from './utils/core';
-import { EPUBJS_VERSION } from './utils/constants';
-
-import IframeView from './managers/views/iframe';
-import DefaultViewManager from './managers/default';
+import CFI from './epubcfi';
 import ContinuousViewManager from './managers/continuous';
+import DefaultViewManager from './managers/default';
+import IframeView from './managers/views/iframe';
+import Rendition from './rendition';
+import { EPUBJS_VERSION } from './utils/constants';
+import * as utils from './utils/core';
 
 /**
  * Creates a new Book

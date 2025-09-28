@@ -1,6 +1,8 @@
 import EpubCFI from './epubcfi';
-import Hook, { HooksObject } from './utils/hook';
+import type Packaging from './packaging';
+import type { PackagingManifestObject } from './packaging';
 import Section from './section';
+import Hook, { HooksObject } from './utils/hook';
 import {
   replaceBase,
   replaceCanonical,
@@ -10,9 +12,6 @@ import {
 /**
  * A collection of Spine Items
  */
-import type Packaging from './packaging';
-import type { PackagingManifestObject } from './packaging';
-
 class Spine {
   spineItems: Section[] = [];
   spineByHref: Record<string, number> = {};

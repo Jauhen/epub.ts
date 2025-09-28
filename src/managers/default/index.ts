@@ -1,11 +1,12 @@
 import EventEmitter from 'events';
-import { extend, defer, windowBounds, isNumber } from '../../utils/core';
-import scrollType from '../../utils/scrolltype';
+
 import Mapping from '../../mapping';
+import { EVENTS } from '../../utils/constants';
+import { defer, extend, isNumber, windowBounds } from '../../utils/core';
 import Queue from '../../utils/queue';
+import scrollType from '../../utils/scrolltype';
 import Stage from '../helpers/stage';
 import Views from '../helpers/views';
-import { EVENTS } from '../../utils/constants';
 import Manager from '../manager';
 
 export interface ViewLocation {

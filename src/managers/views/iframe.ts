@@ -1,18 +1,18 @@
 import EventEmitter from 'events';
-import {
-  extend,
-  borders,
-  uuid,
-  isNumber,
-  bounds,
-  defer,
-  createBlobUrl,
-  revokeBlobUrl,
-} from '../../utils/core';
-import EpubCFI from '../../epubcfi';
+import { Highlight, Pane, Underline } from 'marks-pane';
+
 import Contents from '../../contents';
+import EpubCFI from '../../epubcfi';
 import { EVENTS } from '../../utils/constants';
-import { Pane, Highlight, Underline } from 'marks-pane';
+import {
+  borders,
+  bounds,
+  createBlobUrl,
+  extend,
+  isNumber,
+  revokeBlobUrl,
+  uuid,
+} from '../../utils/core';
 import View from '../view';
 
 interface IframeViewSettings {

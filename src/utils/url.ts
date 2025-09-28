@@ -1,5 +1,6 @@
-import Path from './path';
 import path from 'path-webpack';
+
+import Path from './path';
 
 /**
  * creates a Url object for parsing and manipulation of a url string

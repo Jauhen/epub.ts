@@ -1,8 +1,9 @@
-import { qs, sprint, locationOf, defer } from './utils/core';
-import Queue from './utils/queue';
+import EventEmitter from 'events';
+
 import EpubCFI from './epubcfi';
 import { EVENTS } from './utils/constants';
-import EventEmitter from 'events';
+import { defer, locationOf, qs, sprint } from './utils/core';
+import Queue from './utils/queue';
 
 /**
  * Find Locations for a Book

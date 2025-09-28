@@ -1,4 +1,4 @@
-import { qs, qsa, querySelectorByType, filterChildren } from './utils/core';
+import { filterChildren, qs, qsa, querySelectorByType } from './utils/core';
 
 export interface NavItem {
   id: string;

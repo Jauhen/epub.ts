@@ -27,8 +27,8 @@ const _URL =
   typeof URL != 'undefined'
     ? URL
     : typeof window != 'undefined'
-    ? window.URL || (window as any).webkitURL || (window as any).mozURL
-    : undefined;
+      ? window.URL || (window as any).webkitURL || (window as any).mozURL
+      : undefined;
 
 /**
  * Generates a UUID

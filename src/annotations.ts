@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
-import EpubCFI from './epubcfi';
-import { EVENTS } from './utils/constants';
 
+import EpubCFI from './epubcfi';
+import type View from './managers/view';
 /**
  * Handles managing adding & removing Annotations
  * @param {Rendition} rendition
@@ -9,7 +9,7 @@ import { EVENTS } from './utils/constants';
  */
 
 import type Rendition from './rendition';
-import type View from './managers/view';
+import { EVENTS } from './utils/constants';
 
 class Annotations {
   private rendition: Rendition;

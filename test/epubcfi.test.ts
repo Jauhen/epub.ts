@@ -1,9 +1,6 @@
-import EpubCFI from '../src/epubcfi';
 import { expect } from '@esm-bundle/chai';
 
-if (typeof DOMParser === 'undefined') {
-  global.DOMParser = require('xmldom').DOMParser;
-}
+import EpubCFI from '../src/epubcfi';
 
 describe('EpubCFI', function () {
   it('parse a cfi on init', function () {

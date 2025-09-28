@@ -1,11 +1,12 @@
-import { substitute } from './utils/replacements';
-import { createBase64Url, createBlobUrl, blob2base64 } from './utils/core';
-import Url from './utils/url';
+import path from 'path-webpack';
+
+import type Archive from './archive';
+import type { PackagingManifestObject } from './packaging';
+import { blob2base64, createBase64Url, createBlobUrl } from './utils/core';
 import mime from './utils/mime';
 import Path from './utils/path';
-import path from 'path-webpack';
-import type { PackagingManifestObject } from './packaging';
-import type Archive from './archive';
+import { substitute } from './utils/replacements';
+import Url from './utils/url';
 
 /**
  * Handle Package Resources

@@ -1,8 +1,8 @@
-import Section from '../section';
-import Layout from '../layout';
 import Contents from '../contents';
-import View, { ViewSettings } from './view';
+import Layout from '../layout';
 import { EpubCFIPair } from '../mapping';
+import Section from '../section';
+import View, { ViewSettings } from './view';
 
 export interface ViewLocation {
   index: number;

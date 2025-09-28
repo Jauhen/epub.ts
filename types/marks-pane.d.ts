@@ -1,7 +1,7 @@
 // Type definitions for marks-pane
 // Project: marks-pane (custom local typings)
 
-declare module "marks-pane" {
+declare module 'marks-pane' {
   export class Pane {
     target: Node;
     element: SVGSVGElement;
@@ -35,7 +35,7 @@ declare module "marks-pane" {
       range: Range,
       className?: string,
       data?: { [key: string]: string },
-      attributes?: { [key: string]: string | number | boolean }
+      attributes?: { [key: string]: string | number | boolean },
     );
     bind(element: HTMLElement, container: HTMLElement): void;
     render(): void;
@@ -46,7 +46,7 @@ declare module "marks-pane" {
       range: Range,
       className?: string,
       data?: { [key: string]: string },
-      attributes?: { [key: string]: string | number | boolean }
+      attributes?: { [key: string]: string | number | boolean },
     );
     render(): void;
   }

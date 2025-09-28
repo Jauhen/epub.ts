@@ -2,7 +2,7 @@
 // Project: path-webpack (custom local typings)
 
 /** POSIX path API, similar to Node.js 'path' module, but for browser/webpack environments. */
-declare module "path-webpack" {
+declare module 'path-webpack' {
   export interface PathObject {
     root?: string;
     dir?: string;

@@ -1,10 +1,4 @@
-import {
-  extend,
-  type,
-  findChildren,
-  RangeObject,
-  isNumber,
-} from './utils/core';
+import { findChildren, isNumber, RangeObject, type } from './utils/core';
 
 const ELEMENT_NODE = 1;
 const TEXT_NODE = 3;
@@ -944,19 +938,19 @@ class EpubCFI {
   }
 
   textNodes(container: Node, ignoreClass: string): Node[] {
-    return Array.prototype.slice
-      .call(container.childNodes)
-      .filter(function (node: Node): boolean {
-        if (node.nodeType === TEXT_NODE) {
-          return true;
-        } else if (
-          ignoreClass &&
-          (node as Element).classList.contains(ignoreClass)
-        ) {
-          return true;
-        }
-        return false;
-      });
+    return Array.prototype.slice.call(container.childNodes).filter(function (
+      node: Node,
+    ): boolean {
+      if (node.nodeType === TEXT_NODE) {
+        return true;
+      } else if (
+        ignoreClass &&
+        (node as Element).classList.contains(ignoreClass)
+      ) {
+        return true;
+      }
+      return false;
+    });
   }
 
   walkToNode(

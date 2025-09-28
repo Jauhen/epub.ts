@@ -1,10 +1,10 @@
 import EpubCFI from './epubcfi';
 import {
+  indexOfSorted,
+  locationOf,
   qs,
   qsa,
   querySelectorByType,
-  indexOfSorted,
-  locationOf,
 } from './utils/core';
 
 export interface PageListItem {

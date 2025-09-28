@@ -1,5 +1,6 @@
-// Detect RTL scroll type
-// Based on https://github.com/othree/jquery.rtl-scroll-type/blob/master/src/jquery.rtl-scroll.js
+/** Detect RTL scroll type
+ * Based on https://github.com/othree/jquery.rtl-scroll-type/blob/master/src/jquery.rtl-scroll.js
+ */
 export default function scrollType(): string {
   let type = 'reverse';
   const definer = createDefiner();

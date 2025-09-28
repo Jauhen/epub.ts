@@ -1,8 +1,9 @@
-import ePub from '../src/epub';
 import { expect } from '@esm-bundle/chai';
 import { setViewport } from '@web/test-runner-commands';
-// @ts-ignore
+// @ts-expect-error
 import { visualDiff } from '@web/test-runner-visual-regression';
+
+import ePub from '../src/epub';
 
 describe('Rendering', () => {
   let div: HTMLDivElement;
@@ -34,12 +35,11 @@ describe('Rendering', () => {
     });
     rendition.display('chapter_001.xhtml');
     await book.ready;
-    const response = new Promise<void>((resolve) => {
+    await new Promise<void>((resolve) => {
       rendition.on('rendered', () => {
         resolve();
       });
     });
-    await response;
     expect(div.firstChild).to.exist;
     await visualDiff(div, 'first-page');
     rendition.destroy();

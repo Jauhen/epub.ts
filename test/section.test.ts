@@ -1,5 +1,6 @@
-import ePub from '../src/epub';
 import { expect } from '@esm-bundle/chai';
+
+import ePub from '../src/epub';
 
 describe('section', function () {
   it('finds a single result in a section', async () => {

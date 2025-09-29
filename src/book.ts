@@ -439,7 +439,7 @@ class Book extends EventEmitter {
           this.displayOptions = new DisplayOptions(xml as XMLDocument);
           this.loading?.displayOptions.resolve(this.displayOptions);
         })
-        .catch((err: Error) => {
+        .catch(() => {
           this.displayOptions = new DisplayOptions();
           this.loading?.displayOptions.resolve(this.displayOptions);
         });

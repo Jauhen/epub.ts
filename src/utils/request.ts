@@ -1,25 +1,36 @@
 import { defer, isXml, parse } from './core';
 import Path from './path';
 
+export type ResponseType = Blob | ArrayBuffer | string | Document | XMLDocument;
+export type RequestTypeFormat =
+  | 'blob'
+  | 'binary'
+  | 'json'
+  | 'html'
+  | 'htm'
+  | 'xml'
+  | 'xhtml'
+  | 'text';
+
 export type RequestMethod = (
   url: string,
-  type?: string,
+  type?: RequestTypeFormat,
   withCredentials?: boolean,
   headers?: Record<string, string>,
-) => Promise<Blob | string | JSON | Document | XMLDocument>;
+) => Promise<ResponseType>;
 
 function request(
   url: string,
-  type?: string,
+  type?: RequestTypeFormat,
   withCredentials?: boolean,
   headers?: Record<string, string>,
-): Promise<Blob | string | JSON | Document | XMLDocument> {
+): Promise<ResponseType> {
   const supportsURL = typeof window != 'undefined' ? window.URL : false; // TODO: fallback for url if window isn't defined
   const BLOB_RESPONSE: XMLHttpRequestResponseType = supportsURL
     ? 'blob'
     : 'arraybuffer';
 
-  const deferred = defer<Blob | string | JSON | Document | XMLDocument>();
+  const deferred = defer<ResponseType>();
 
   const xhr = new XMLHttpRequest();
 
@@ -55,9 +66,9 @@ function request(
     xhr.setRequestHeader('Accept', 'application/json');
   }
 
-  // If type isn"t set, determine it from the file extension
+  // If type isn't set, determine it from the file extension
   if (!type) {
-    type = new Path(url).extension;
+    type = new Path(url).extension as RequestTypeFormat;
   }
 
   if (type == 'blob') {

@@ -2,7 +2,7 @@ import EventEmitter from 'events';
 
 import Mapping from '../../mapping';
 import { EVENTS } from '../../utils/constants';
-import { defer, extend, isNumber, windowBounds } from '../../utils/core';
+import { defer, isNumber, windowBounds } from '../../utils/core';
 import Queue from '../../utils/queue';
 import scrollType from '../../utils/scrolltype';
 import Stage from '../helpers/stage';
@@ -68,8 +68,7 @@ class DefaultViewManager extends EventEmitter implements Manager {
     this.renditionQueue = options.queue;
     this.q = new Queue<DefaultViewManager>(this);
 
-    this.settings = extend(this.settings || {}) as any;
-    Object.assign(this.settings, {
+    this.settings = {
       infinite: true,
       hidden: false,
       width: undefined,
@@ -81,7 +80,7 @@ class DefaultViewManager extends EventEmitter implements Manager {
       fullsize: undefined,
       allowScriptedContent: false,
       allowPopups: false,
-    });
+    };
 
     Object.assign(this.settings, options.settings || {});
 

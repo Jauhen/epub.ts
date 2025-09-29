@@ -1,29 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>EPUB.js Basic Example</title>
+  <head>
+    <meta charset="utf-8" />
+    <title>EPUB.js Basic Example</title>
 
-  <script src="/src/index.bundle?platform=web&dev=true&minify=false"></script>
+    <script src="/src/index.bundle?platform=web&dev=true&minify=false"></script>
 
-  <link rel="stylesheet" type="text/css" href="examples.css">
+    <link rel="stylesheet" type="text/css" href="examples.css" />
+  </head>
+  <body>
+    <div id="viewer" class="scrolled"></div>
 
-</head>
-<body>
-  <div id="viewer" class="scrolled"></div>
+    <script>
+      var $viewer = document.getElementById('viewer');
 
-  <script>
-    var $viewer = document.getElementById("viewer");
-
-    var book = ePub("https://s3.amazonaws.com/epubjs/books/moby-dick/OPS/package.opf");
-    book.ready.then(function(){
-      book.getRange("epubcfi(/6/14[xchapter_001]!/4/2,/2/2/2[c001s0000]/1:0,/8/2[c001p0003]/1:663)").then(function(range) {
-        let text = range.toString()
-        console.log(text);
-        $viewer.textContent = text;
+      var book = ePub(
+        'https://s3.amazonaws.com/epubjs/books/moby-dick/OPS/package.opf',
+      );
+      book.ready.then(function () {
+        book
+          .getRange(
+            'epubcfi(/6/14[xchapter_001]!/4/2,/2/2/2[c001s0000]/1:0,/8/2[c001p0003]/1:663)',
+          )
+          .then(function (range) {
+            let text = range.toString();
+            console.log(text);
+            $viewer.textContent = text;
+          });
       });
-    });
-  </script>
-
-</body>
+    </script>
+  </body>
 </html>

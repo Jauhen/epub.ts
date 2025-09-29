@@ -149,26 +149,6 @@ export function defaults(obj: object): object {
 }
 
 /**
- * Extend properties of an object
- * @param {object} target
- * @returns {object}
- * @memberof Core
- */
-export function extend(target: object): object {
-  const sources = [].slice.call(arguments, 1);
-  sources.forEach(function (source: any) {
-    if (!source) return;
-    Object.getOwnPropertyNames(source).forEach(function (propName: string) {
-      const descriptor = Object.getOwnPropertyDescriptor(source, propName);
-      if (descriptor) {
-        Object.defineProperty(target, propName, descriptor);
-      }
-    });
-  });
-  return target;
-}
-
-/**
  * Fast quicksort insert for sorted array -- based on:
  *  http://stackoverflow.com/questions/1344500/efficient-way-to-insert-a-number-into-a-sorted-array-of-numbers
  * @param {any} item

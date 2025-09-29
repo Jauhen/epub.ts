@@ -75,7 +75,7 @@ class IframeView extends EventEmitter implements View {
 
   constructor(section: any, options?: IframeViewSettings) {
     super();
-    this.settings = extend({
+    this.settings = {
       ignoreClass: '',
       axis: undefined,
       direction: undefined,
@@ -87,7 +87,7 @@ class IframeView extends EventEmitter implements View {
       forceRight: false,
       allowScriptedContent: false,
       allowPopups: false,
-    });
+    };
     if (options) {
       Object.assign(this.settings, options);
     }

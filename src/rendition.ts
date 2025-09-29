@@ -11,7 +11,7 @@ import DefaultViewManager from './managers/default/index';
 import IframeView from './managers/views/iframe';
 import Themes from './themes';
 import { DOM_EVENTS, EVENTS } from './utils/constants';
-import { defer, extend, isFloat } from './utils/core';
+import { defer, isFloat } from './utils/core';
 import Hook from './utils/hook';
 import Queue from './utils/queue';
 
@@ -105,7 +105,7 @@ class Rendition extends EventEmitter {
 
   constructor(book: Book, options?: RenditionOptions) {
     super();
-    this.settings = (extend as any)(
+    this.settings = Object.assign(
       {},
       {
         width: undefined,
@@ -127,7 +127,7 @@ class Rendition extends EventEmitter {
         globalLayoutProperties: undefined,
       },
     );
-    if (options) (extend as any)(this.settings, options);
+    if (options) Object.assign(this.settings, options);
 
     if (typeof this.settings.manager === 'object') {
       this.manager = this.settings.manager;

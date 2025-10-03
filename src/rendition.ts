@@ -4,9 +4,9 @@ import Annotations from './annotations';
 import type Book from './book';
 import EpubCFI from './epubcfi';
 import Layout from './layout';
-import ContinuousViewManager from './managers/continuous/index';
+import ContinuousViewManager from './managers/managers/continuous';
 // Default View Managers
-import DefaultViewManager from './managers/default/index';
+import DefaultViewManager from './managers/managers/default';
 // Default Views
 import IframeView from './managers/views/iframe';
 import Themes from './themes';

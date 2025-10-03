@@ -1,8 +1,8 @@
 import Book, { type BookOptions } from './book';
 import Contents from './contents';
 import CFI from './epubcfi';
-import ContinuousViewManager from './managers/continuous';
-import DefaultViewManager from './managers/default';
+import ContinuousViewManager from './managers/managers/continuous';
+import DefaultViewManager from './managers/managers/default';
 import IframeView from './managers/views/iframe';
 import Rendition from './rendition';
 import { EPUBJS_VERSION } from './utils/constants';

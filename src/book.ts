@@ -20,7 +20,10 @@ import Store from './store';
 import { EPUBJS_VERSION, EVENTS } from './utils/constants';
 import { defer, Defer } from './utils/core';
 import Path from './utils/path';
-import request, { type RequestMethod } from './utils/request';
+import request, {
+  type RequestMethod,
+  type ResponseType,
+} from './utils/request';
 import Url from './utils/url';
 
 const CONTAINER_PATH = 'META-INF/container.xml';
@@ -334,7 +337,7 @@ class Book extends EventEmitter {
    * @param  {string} path path to the resource to load
    * @return {Promise}     returns a promise with the requested resource
    */
-  load(path: string): Promise<string | Blob | JSON | Document | XMLDocument> {
+  load(path: string): Promise<ResponseType> {
     const resolved = this.resolve(path);
     if (this.archived && this.archive) {
       return this.archive.request(resolved);

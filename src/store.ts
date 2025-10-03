@@ -5,7 +5,7 @@ import Resources from './resources';
 import { isXml, parse } from './utils/core';
 import mime from './utils/mime';
 import Path from './utils/path';
-import httpRequest from './utils/request';
+import httpRequest, { ResponseType } from './utils/request';
 
 /**
  * Handles saving and requesting files from local storage
@@ -137,14 +137,14 @@ class Store extends EventEmitter {
    * @param  {string} [type] specify the type of the returned result
    * @param  {boolean} [withCredentials]
    * @param  {object} [headers]
-   * @return {Promise<Blob | string | JSON | Document | XMLDocument>}
+   * @return {Promise<ResponseType>}
    */
   request(
     url: string,
     type?: string,
     withCredentials?: boolean,
     headers?: object,
-  ): Promise<Blob | string | JSON | Document | XMLDocument> {
+  ): Promise<ResponseType> {
     if (this.online) {
       // From network
       return this.requester(url, type, withCredentials, headers).then(
@@ -164,12 +164,9 @@ class Store extends EventEmitter {
    * Request a url from storage
    * @param  {string} url  a url to request from storage
    * @param  {string} [type] specify the type of the returned result
-   * @return {Promise<Blob | string | JSON | Document | XMLDocument>}
+   * @return {Promise<ResponseType>}
    */
-  retrieve(
-    url: string,
-    type?: string,
-  ): Promise<Blob | string | JSON | Document | XMLDocument> {
+  retrieve(url: string, type?: string): Promise<ResponseType> {
     const path = new Path(url);
     let t = type;
     if (!t) {
@@ -203,10 +200,7 @@ class Store extends EventEmitter {
    * @param  {string} [type]
    * @return {any} the parsed result
    */
-  private handleResponse(
-    response: any,
-    type?: string,
-  ): Blob | string | JSON | Document | XMLDocument {
+  private handleResponse(response: any, type?: string): ResponseType {
     let r: any;
     if (type === 'json') {
       r = JSON.parse(response);

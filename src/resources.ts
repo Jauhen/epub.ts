@@ -6,6 +6,7 @@ import { blob2base64, createBase64Url, createBlobUrl } from './utils/core';
 import mime from './utils/mime';
 import Path from './utils/path';
 import { substitute } from './utils/replacements';
+import { RequestMethod, ResponseType } from './utils/request';
 import Url from './utils/url';
 
 /**
@@ -21,7 +22,7 @@ interface ResourcesOptions {
   replacements?: string;
   archive?: Archive;
   resolver?: (url: string) => string;
-  request?: (url: string, type?: string) => Promise<any>;
+  request?: RequestMethod;
 }
 
 interface ResourceItem {
@@ -119,12 +120,12 @@ class Resources {
       if (this.settings.replacements === 'base64') {
         return this.settings
           .request(url, 'blob')
-          .then((blob: Blob) => blob2base64(blob) as Promise<string>)
+          .then((blob) => blob2base64(blob as Blob) as Promise<string>)
           .then((blob: string) => createBase64Url(blob, mimeType) as string);
       } else {
         return this.settings
           .request(url, 'blob')
-          .then((blob: Blob) => createBlobUrl(blob, mimeType) as string);
+          .then((blob) => createBlobUrl(blob as Blob, mimeType) as string);
       }
     }
     return Promise.reject('No archive or request method provided');
@@ -203,7 +204,7 @@ class Resources {
       textResponse =
         this.settings.archive.getText(absolute) || Promise.resolve('');
     } else if (this.settings.request) {
-      textResponse = this.settings.request(absolute, 'text');
+      textResponse = this.settings.request(absolute, 'text') as Promise<string>;
     } else {
       return Promise.resolve('');
     }

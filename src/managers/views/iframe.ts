@@ -8,7 +8,6 @@ import {
   borders,
   bounds,
   createBlobUrl,
-  extend,
   isNumber,
   revokeBlobUrl,
   uuid,

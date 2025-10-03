@@ -370,6 +370,21 @@ export class Section {
     // @ts-ignore
     this.cfiBase = undefined;
   }
+
+  toJSON(): object {
+    return {
+      idref: this.idref,
+      linear: this.linear,
+      properties: this.properties,
+      index: this.index,
+      href: this.href,
+      url: this.url,
+      canonical: this.canonical,
+      cfiBase: this.cfiBase,
+      contents: this.contents?.innerHTML,
+      output: this.output,
+    };
+  }
 }
 
 export default Section;

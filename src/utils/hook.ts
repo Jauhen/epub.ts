@@ -81,4 +81,5 @@ class Hook {
     this.hooks = [];
   }
 }
+
 export default Hook;

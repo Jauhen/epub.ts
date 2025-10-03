@@ -1,10 +1,5 @@
 import { findChildren, isNumber, RangeObject, type } from './utils/core';
 
-const ELEMENT_NODE = 1;
-const TEXT_NODE = 3;
-const COMMENT_NODE = 8;
-const DOCUMENT_NODE = 9;
-
 interface EpubCFISegment {
   steps: EpubCFIStep[];
   terminal: {
@@ -484,7 +479,8 @@ class EpubCFI {
   }
 
   step(node: Element): EpubCFIStep {
-    const nodeType: string = node.nodeType === TEXT_NODE ? 'text' : 'element';
+    const nodeType: string =
+      node.nodeType === Node.TEXT_NODE ? 'text' : 'element';
 
     return {
       id: node.id,
@@ -504,7 +500,7 @@ class EpubCFI {
     }
 
     // Otherwise add the filter node in
-    nodeType = filteredNode.nodeType === TEXT_NODE ? 'text' : 'element';
+    nodeType = filteredNode.nodeType === Node.TEXT_NODE ? 'text' : 'element';
 
     return {
       id: filteredNode.id,
@@ -532,7 +528,7 @@ class EpubCFI {
     while (
       currentNode &&
       currentNode.parentNode &&
-      currentNode.parentNode.nodeType != DOCUMENT_NODE
+      currentNode.parentNode.nodeType != Node.DOCUMENT_NODE
     ) {
       if (ignoreClass) {
         step = this.filteredStep(currentNode, ignoreClass);
@@ -732,7 +728,7 @@ class EpubCFI {
       nextSibling: Node | null;
     let isText = false;
 
-    if (anchor.nodeType === TEXT_NODE) {
+    if (anchor.nodeType === Node.TEXT_NODE) {
       isText = true;
       parent = anchor.parentNode!;
       needsIgnoring = (anchor.parentNode as Element).classList.contains(
@@ -748,9 +744,9 @@ class EpubCFI {
       nextSibling = parent?.nextSibling || null;
 
       // If the sibling is a text node, join the nodes
-      if (previousSibling && previousSibling.nodeType === TEXT_NODE) {
+      if (previousSibling && previousSibling.nodeType === Node.TEXT_NODE) {
         sibling = previousSibling;
-      } else if (nextSibling && nextSibling.nodeType === TEXT_NODE) {
+      } else if (nextSibling && nextSibling.nodeType === Node.TEXT_NODE) {
         sibling = nextSibling;
       }
 
@@ -774,7 +770,7 @@ class EpubCFI {
     offset: number | null,
     ignoreClass: string,
   ): number {
-    if (anchor.nodeType != TEXT_NODE) {
+    if (anchor.nodeType != Node.TEXT_NODE) {
       throw new Error('Anchor must be a text node');
     }
 
@@ -790,7 +786,7 @@ class EpubCFI {
     }
 
     while (curr.previousSibling) {
-      if (curr.previousSibling.nodeType === ELEMENT_NODE) {
+      if (curr.previousSibling.nodeType === Node.ELEMENT_NODE) {
         const prevSibling = curr.previousSibling as Element;
         // Originally a text node, so join
         if (prevSibling.classList.contains(ignoreClass)) {
@@ -826,13 +822,17 @@ class EpubCFI {
 
       // Check if needs ignoring
       if (
-        currNodeType === ELEMENT_NODE &&
+        currNodeType === Node.ELEMENT_NODE &&
         (children[i] as Element).classList.contains(ignoreClass)
       ) {
-        currNodeType = TEXT_NODE;
+        currNodeType = Node.TEXT_NODE;
       }
 
-      if (i > 0 && currNodeType === TEXT_NODE && prevNodeType === TEXT_NODE) {
+      if (
+        i > 0 &&
+        currNodeType === Node.TEXT_NODE &&
+        prevNodeType === Node.TEXT_NODE
+      ) {
         // join text nodes
         output[i] = prevIndex;
       } else if (nodeType === currNodeType) {
@@ -848,7 +848,7 @@ class EpubCFI {
 
   position(anchor: Node): number {
     let children: Node[], index: number;
-    if (anchor.nodeType === ELEMENT_NODE) {
+    if (anchor.nodeType === Node.ELEMENT_NODE) {
       children = Array.from(anchor.parentNode?.children || []);
       if (!children) {
         children = findChildren(anchor.parentNode as Element);
@@ -867,9 +867,9 @@ class EpubCFI {
       index: number,
       map: Record<number, number>;
 
-    if (anchor.nodeType === ELEMENT_NODE) {
+    if (anchor.nodeType === Node.ELEMENT_NODE) {
       children = anchor.parentNode!.children;
-      map = this.normalizedMap(children, ELEMENT_NODE, ignoreClass);
+      map = this.normalizedMap(children, Node.ELEMENT_NODE, ignoreClass);
     } else {
       children = anchor.parentNode!.childNodes;
       // Inside an ignored node
@@ -877,7 +877,7 @@ class EpubCFI {
         anchor = anchor.parentNode!;
         children = anchor.parentNode!.childNodes;
       }
-      map = this.normalizedMap(children, TEXT_NODE, ignoreClass);
+      map = this.normalizedMap(children, Node.TEXT_NODE, ignoreClass);
     }
 
     index = Array.prototype.indexOf.call(children, anchor);
@@ -941,7 +941,7 @@ class EpubCFI {
     return Array.prototype.slice.call(container.childNodes).filter(function (
       node: Node,
     ): boolean {
-      if (node.nodeType === TEXT_NODE) {
+      if (node.nodeType === Node.TEXT_NODE) {
         return true;
       } else if (
         ignoreClass &&
@@ -1034,7 +1034,7 @@ class EpubCFI {
     const children: NodeList = container!.childNodes;
     const map: Record<number, number> = this.normalizedMap(
       children,
-      TEXT_NODE,
+      Node.TEXT_NODE,
       ignoreClass,
     );
     let child: Node;
@@ -1050,7 +1050,7 @@ class EpubCFI {
         if (offset && offset > len) {
           offset = offset - len;
         } else {
-          if (child.nodeType === ELEMENT_NODE) {
+          if (child.nodeType === Node.ELEMENT_NODE) {
             container = child.childNodes[0];
           } else {
             container = child;

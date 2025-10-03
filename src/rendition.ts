@@ -105,29 +105,28 @@ class Rendition extends EventEmitter {
 
   constructor(book: Book, options?: RenditionOptions) {
     super();
-    this.settings = Object.assign(
-      {},
-      {
-        width: undefined,
-        height: undefined,
-        ignoreClass: '',
-        manager: 'default',
-        view: 'iframe',
-        flow: undefined,
-        layout: undefined,
-        spread: undefined,
-        minSpreadWidth: 800,
-        stylesheet: undefined,
-        resizeOnOrientationChange: true,
-        script: undefined,
-        snap: false,
-        defaultDirection: 'ltr',
-        allowScriptedContent: false,
-        allowPopups: false,
-        globalLayoutProperties: undefined,
-      },
-    );
-    if (options) Object.assign(this.settings, options);
+    this.settings = {
+      width: undefined,
+      height: undefined,
+      ignoreClass: '',
+      manager: 'default',
+      view: 'iframe',
+      flow: undefined,
+      layout: undefined,
+      spread: undefined,
+      minSpreadWidth: 800,
+      stylesheet: undefined,
+      resizeOnOrientationChange: true,
+      script: undefined,
+      snap: false,
+      defaultDirection: 'ltr',
+      allowScriptedContent: false,
+      allowPopups: false,
+      globalLayoutProperties: undefined,
+    };
+    if (options) {
+      Object.assign(this.settings, options);
+    }
 
     if (typeof this.settings.manager === 'object') {
       this.manager = this.settings.manager;

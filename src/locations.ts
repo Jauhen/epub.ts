@@ -105,7 +105,10 @@ class Locations extends EventEmitter {
   parse(contents: Node, cfiBase: string, chars?: number): string[] {
     const locations: string[] = [];
     let range: any;
-    const doc = (contents as any).ownerDocument;
+    const doc =
+      contents.nodeType === Node.DOCUMENT_NODE
+        ? contents
+        : (contents as any).ownerDocument;
     const body = qs(doc, 'body');
     let counter = 0;
     let prev: any;

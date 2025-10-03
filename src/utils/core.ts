@@ -19,10 +19,6 @@ export const requestAnimationFrame: (callback: () => void) => number =
         return setTimeout(callback, 0) as unknown as number;
       };
 
-const ELEMENT_NODE = 1;
-const TEXT_NODE = 3;
-const COMMENT_NODE = 8;
-const DOCUMENT_NODE = 9;
 const _URL =
   typeof URL != 'undefined'
     ? URL
@@ -442,7 +438,7 @@ export function indexOfNode(node: Node, typeId: number): number {
  * @memberof Core
  */
 export function indexOfTextNode(textNode: Node): number {
-  return indexOfNode(textNode, TEXT_NODE);
+  return indexOfNode(textNode, Node.TEXT_NODE);
 }
 
 /**
@@ -452,7 +448,7 @@ export function indexOfTextNode(textNode: Node): number {
  * @memberof Core
  */
 export function indexOfElementNode(elementNode: Element): number {
-  return indexOfNode(elementNode, ELEMENT_NODE);
+  return indexOfNode(elementNode, Node.ELEMENT_NODE);
 }
 
 /**

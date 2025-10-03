@@ -3,7 +3,7 @@ import EventEmitter from 'events';
 import EpubCFI from './epubcfi';
 import Mapping from './mapping';
 import { DOM_EVENTS, EPUBJS_VERSION, EVENTS } from './utils/constants';
-import { borders, defaults, isNumber, prefixed } from './utils/core';
+import { borders, isNumber, prefixed } from './utils/core';
 import { replaceLinks } from './utils/replacements';
 
 interface ViewportSettings {
@@ -20,9 +20,6 @@ const hasNavigator = typeof navigator !== 'undefined';
 const isChrome = hasNavigator && /Chrome/.test(navigator.userAgent);
 const isWebkit =
   hasNavigator && !isChrome && /AppleWebKit/.test(navigator.userAgent);
-
-const ELEMENT_NODE = 1;
-const TEXT_NODE = 3;
 
 /**
  * Handles DOM manipulation, queries and events for View contents
@@ -700,7 +697,7 @@ class Contents extends EventEmitter {
             const container = range.startContainer;
             const newRange = new Range();
             try {
-              if (container.nodeType === ELEMENT_NODE) {
+              if (container.nodeType === Node.ELEMENT_NODE) {
                 position = (container as Element).getBoundingClientRect();
               } else if (range.startOffset + 2 < (container as Text).length) {
                 newRange.setStart(container, range.startOffset);

@@ -5,7 +5,7 @@ import { defer, sprint } from './utils/core';
 import Hook from './utils/hook';
 import type { HooksObject } from './utils/hook';
 import { replaceBase } from './utils/replacements';
-import Request from './utils/request';
+import Request, { ResponseType } from './utils/request';
 
 export interface GlobalLayout {
   layout: string;
@@ -86,9 +86,10 @@ export class Section {
    * @return {document} a promise with the xml document
    */
   load(
-    _request?: (url: string) => Promise<Document>,
+    _request?: (url: string) => Promise<ResponseType>,
   ): Promise<Document | undefined> {
-    const request = _request || (Request as (url: string) => Promise<Document>);
+    const request =
+      _request || (Request as (url: string) => Promise<ResponseType>);
     const loading = defer<Document | undefined>();
     const loaded = loading.promise;
 
@@ -96,9 +97,9 @@ export class Section {
       loading.resolve(this.contents.ownerDocument || this.document);
     } else if (this.url) {
       request(this.url)
-        .then((xml: Document) => {
-          this.document = xml;
-          this.contents = xml.documentElement;
+        .then((xml: ResponseType) => {
+          this.document = xml as unknown as Document;
+          this.contents = this.document.documentElement;
           return this.hooks.content.trigger(this.document, this);
         })
         .then(() => {
@@ -130,7 +131,7 @@ export class Section {
    * @return {string} output a serialized XML Document
    */
   render(
-    _request?: (url: string) => Promise<Document>,
+    _request?: (url: string) => Promise<ResponseType>,
   ): Promise<string | undefined> {
     const rendering = defer<string | undefined>();
     const rendered = rendering.promise;

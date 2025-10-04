@@ -66,7 +66,7 @@ class DefaultViewManager extends EventEmitter implements Manager {
     this.View = options.view;
     this.request = options.request;
     this.renditionQueue = options.queue;
-    this.q = new Queue<DefaultViewManager>(this);
+    this.q = new Queue();
 
     this.settings = {
       infinite: true,

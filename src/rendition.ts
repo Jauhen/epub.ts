@@ -173,7 +173,7 @@ class Rendition extends EventEmitter {
 
     this.epubcfi = new EpubCFI();
 
-    this.q = new Queue<Rendition>(this);
+    this.q = new Queue();
 
     /**
      * A Rendered Location Range
@@ -204,7 +204,7 @@ class Rendition extends EventEmitter {
     this.location = undefined;
 
     // Hold queue until book is opened
-    this.q.enqueue(this.book.opened! as any);
+    this.q.enqueue(this.book.opened! as any, 'Rendition: wait for book opened');
 
     this.starting = defer();
     /**
@@ -214,7 +214,7 @@ class Rendition extends EventEmitter {
     this.started = this.starting.promise;
 
     // Block the queue until rendering is started
-    this.q.enqueue(this.start);
+    this.q.enqueue(() => this.start(), 'Rendition: start');
   }
 
   /**
@@ -359,7 +359,7 @@ class Rendition extends EventEmitter {
        * @memberof Rendition
        */
       this.emit(EVENTS.RENDITION.ATTACHED);
-    });
+    }, 'Rendition: attachTo');
   }
 
   /**
@@ -374,7 +374,7 @@ class Rendition extends EventEmitter {
     if (this.displaying) {
       this.displaying.resolve();
     }
-    return this.q.enqueue(this._display, target!);
+    return this.q.enqueue(() => this._display(target!), 'Rendition: display');
   }
 
   /**
@@ -600,8 +600,8 @@ class Rendition extends EventEmitter {
    */
   next() {
     return this.q
-      .enqueue(this.manager.next.bind(this.manager))
-      .then(this.reportLocation.bind(this));
+      .enqueue(() => this.manager.next(), 'Rendition: next')
+      .then(() => this.reportLocation());
   }
 
   /**
@@ -610,8 +610,8 @@ class Rendition extends EventEmitter {
    */
   prev() {
     return this.q
-      .enqueue(this.manager.prev.bind(this.manager))
-      .then(this.reportLocation.bind(this));
+      .enqueue(() => this.manager.prev(), 'Rendition: prev')
+      .then(() => this.reportLocation());
   }
 
   //-- http://www.idpf.org/epub/301/spec/epub-publications.html#meta-properties-rendering
@@ -766,32 +766,12 @@ class Rendition extends EventEmitter {
    * @fires locationChanged
    */
   reportLocation() {
-    return this.q.enqueue(
-      function reportedLocation(this: Rendition) {
-        requestAnimationFrame(() => {
-          const location = this.manager.currentLocation();
-          if (
-            location &&
-            location.then &&
-            typeof location.then === 'function'
-          ) {
-            location.then((result: any) => {
-              const located = this.located(result);
-              if (!located || !located.start || !located.end) {
-                return;
-              }
-              this.location = located;
-              this.emit(EVENTS.RENDITION.LOCATION_CHANGED, {
-                index: this.location.start.index,
-                href: this.location.start.href,
-                start: this.location.start.cfi,
-                end: this.location.end.cfi,
-                percentage: this.location.start.percentage,
-              });
-              this.emit(EVENTS.RENDITION.RELOCATED, this.location);
-            });
-          } else if (location) {
-            const located = this.located(location);
+    return this.q.enqueue(() => {
+      requestAnimationFrame(() => {
+        const location = this.manager.currentLocation();
+        if (location && location.then && typeof location.then === 'function') {
+          location.then((result: any) => {
+            const located = this.located(result);
             if (!located || !located.start || !located.end) {
               return;
             }
@@ -804,10 +784,24 @@ class Rendition extends EventEmitter {
               percentage: this.location.start.percentage,
             });
             this.emit(EVENTS.RENDITION.RELOCATED, this.location);
+          });
+        } else if (location) {
+          const located = this.located(location);
+          if (!located || !located.start || !located.end) {
+            return;
           }
-        });
-      }.bind(this),
-    );
+          this.location = located;
+          this.emit(EVENTS.RENDITION.LOCATION_CHANGED, {
+            index: this.location.start.index,
+            href: this.location.start.href,
+            start: this.location.start.cfi,
+            end: this.location.end.cfi,
+            percentage: this.location.start.percentage,
+          });
+          this.emit(EVENTS.RENDITION.RELOCATED, this.location);
+        }
+      });
+    }, 'Rendition: reportLocation');
   }
 
   /**

@@ -1,9 +1,12 @@
 import EventEmitter from 'events';
 
 import EpubCFI from './epubcfi';
+import Section from './section';
+import Spine from './spine';
 import { EVENTS } from './utils/constants';
 import { defer, locationOf, qs, sprint } from './utils/core';
 import Queue from './utils/queue';
+import { ResponseType } from './utils/request';
 
 /**
  * Find Locations for a Book
@@ -13,8 +16,8 @@ import Queue from './utils/queue';
  */
 
 class Locations extends EventEmitter {
-  spine: any;
-  request: Function | undefined;
+  spine: Spine | undefined;
+  request: ((path: string) => Promise<ResponseType>) | undefined;
   pause: number | undefined;
   q: any;
   epubcfi: EpubCFI | undefined;
@@ -27,13 +30,17 @@ class Locations extends EventEmitter {
   _currentCfi: string | undefined;
   processingTimeout: any;
 
-  constructor(spine: any, request?: Function, pause?: number) {
+  constructor(
+    spine: Spine,
+    request?: (path: string) => Promise<ResponseType>,
+    pause?: number,
+  ) {
     super();
     this.spine = spine;
     this.request = request;
     this.pause = pause || 100;
 
-    this.q = new Queue<Locations>(this);
+    this.q = new Queue();
     this.epubcfi = new EpubCFI();
 
     this._locations = [];
@@ -60,9 +67,9 @@ class Locations extends EventEmitter {
       this.break = chars;
     }
     this.q.pause();
-    this.spine.each((section: any) => {
+    this.spine!.each((section: Section) => {
       if (section.linear) {
-        this.q.enqueue(this.process.bind(this), section);
+        this.q.enqueue(() => this.process(section), 'Location process section');
       }
     });
     return this.q.run().then(() => {
@@ -88,10 +95,10 @@ class Locations extends EventEmitter {
     };
   }
 
-  process(section: any): Promise<string[]> {
+  process(section: Section): Promise<string[]> {
     return section.load(this.request).then((contents: any) => {
-      const completed = defer();
-      const locations = this.parse(contents, section.cfiBase);
+      const completed = defer<string[]>();
+      const locations = this.parse(contents, section.cfiBase!);
       this._locations = (this._locations || []).concat(locations);
       section.unload();
       this.processingTimeout = setTimeout(
@@ -191,25 +198,19 @@ class Locations extends EventEmitter {
     this._locationsWords = [];
     this._wordCounter = 0;
 
-    this.spine.each((section: any) => {
+    this.spine!.each((section: Section) => {
       if (section.linear) {
         if (start) {
           if (section.index >= start.spinePos) {
             this.q.enqueue(
-              this.processWords.bind(this),
-              section,
-              wordCount,
-              start,
-              count,
+              () => this.processWords(section, wordCount, start, count),
+              'Location process words',
             );
           }
         } else {
           this.q.enqueue(
-            this.processWords.bind(this),
-            section,
-            wordCount,
-            start,
-            count,
+            () => this.processWords(section, wordCount, start, count),
+            'Location process words',
           );
         }
       }

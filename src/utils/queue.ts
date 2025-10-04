@@ -2,7 +2,7 @@ import { Defer, defer, requestAnimationFrame } from './core';
 
 export interface QueuedTask {
   task?: Task;
-  args: string[];
+  desc: string;
   deferred?: Defer<void>;
   promise: Promise<void>;
 }
@@ -12,17 +12,15 @@ export interface QueuedTask {
  * @class
  * @param {scope} context what this will resolve to in the tasks
  */
-class Queue<T = object> {
+class Queue {
   private _q: QueuedTask[];
-  private context: T;
   private tick: (callback: () => void) => number;
   private running: boolean | Promise<void> | undefined;
   private paused: boolean;
   private deferred: Defer<void> | undefined;
 
-  constructor(context: T) {
+  constructor() {
     this._q = [];
-    this.context = context;
     this.tick = requestAnimationFrame;
     this.running = false;
     this.paused = false;
@@ -32,14 +30,7 @@ class Queue<T = object> {
    * Add an item to the queue
    * @return {Promise}
    */
-  enqueue(
-    task: () => void | Promise<unknown>,
-    ...args: string[]
-  ): Promise<void> {
-    // Handle single args without context
-    // if(args && !Array.isArray(args)) {
-    //   args = [args];
-    // }
+  enqueue(task: (() => void) | Promise<void>, desc: string): Promise<void> {
     if (!task) {
       throw new Error('No Task Provided');
     }
@@ -50,16 +41,15 @@ class Queue<T = object> {
       const promise = deferred.promise;
       queued = {
         task: task,
-        args: Array.from(args),
-        //context  : context,
+        desc: desc,
         deferred: deferred,
         promise: promise,
       };
     } else {
       // Task is a promise
       queued = {
-        args: [],
         promise: task,
+        desc: desc,
       };
     }
 
@@ -87,21 +77,21 @@ class Queue<T = object> {
         if (task) {
           // console.log(task)
 
-          const result = task.apply(this.context, inwait.args);
+          const result = task();
 
           if (result && typeof result['then'] === 'function') {
             // Task is a function that returns a promise
             return result.then(
               (value: any) => {
-                inwait!.deferred?.resolve.apply(this.context, [value]);
+                inwait!.deferred?.resolve(value);
               },
               (error: any) => {
-                inwait!.deferred?.reject.apply(this.context, [error]);
+                inwait!.deferred?.reject(error);
               },
             );
           } else {
             // Task resolves immediately
-            inwait.deferred?.resolve.apply(this.context, [result]);
+            inwait.deferred?.resolve(result);
             return inwait.promise;
           }
         } else if (inwait.promise) {

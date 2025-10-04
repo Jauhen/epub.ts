@@ -202,7 +202,9 @@ class Book extends EventEmitter {
     this.isRendered = false;
     this.request = this.settings.requestMethod || request;
     this.spine = new Spine();
-    this.locations = new Locations(this.spine, this.load.bind(this));
+    this.locations = new Locations(this.spine, (path: string) =>
+      this.load(path),
+    );
     this.navigation = undefined;
     this.pageList = undefined;
     this.url = undefined;

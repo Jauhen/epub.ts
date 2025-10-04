@@ -123,9 +123,7 @@ class ContinuousViewManager extends DefaultViewManager {
     const full = _full || defer();
 
     this.q
-      .enqueue(() => {
-        return this.check();
-      })
+      .enqueue(() => this.check(), 'ContinuousViewManager: check')
       .then((result) => {
         if (result as unknown) {
           this.fill(full);
@@ -255,15 +253,13 @@ class ContinuousViewManager extends DefaultViewManager {
     const visible: View[] = [];
     const offset =
       typeof _offset != 'undefined' ? _offset : this.settings.offset || 0;
-    let isVisible: boolean;
-    let view: View;
 
     const updating = defer<void>();
     const promises: Promise<any>[] = [];
     for (let i = 0; i < viewsLength; i++) {
-      view = views[i];
+      const view = views[i];
 
-      isVisible = this.isVisible(view, offset, offset, container);
+      const isVisible = this.isVisible(view, offset, offset, container);
 
       if (isVisible === true) {
         // console.log("visible " + view.index, view.displayed);
@@ -283,12 +279,11 @@ class ContinuousViewManager extends DefaultViewManager {
         }
         visible.push(view);
       } else {
-        this.q.enqueue(view.destroy.bind(view));
-        // console.log("hidden " + view.index, view.displayed);
+        this.q.enqueue(() => view.destroy(), 'ContinuousViewManager: destroy');
 
         clearTimeout(this.trimTimeout);
         this.trimTimeout = setTimeout(() => {
-          this.q.enqueue(this.trim.bind(this));
+          this.q.enqueue(() => this.trim(), 'ContinuousViewManager: trim');
         }, 250);
       }
     }
@@ -401,9 +396,7 @@ class ContinuousViewManager extends DefaultViewManager {
           },
         );
     } else {
-      this.q.enqueue(() => {
-        this.update();
-      });
+      this.q.enqueue(() => this.update(), 'ContinuousViewManager: update');
       checking.resolve(false);
       return checking.promise;
     }
@@ -580,9 +573,7 @@ class ContinuousViewManager extends DefaultViewManager {
   }
 
   scrolledHandler(): void {
-    this.q.enqueue(() => {
-      return this.check();
-    });
+    this.q.enqueue(() => this.check(), 'ContinuousViewManager: check');
 
     this.emit(EVENTS.MANAGERS.SCROLL, {
       top: this.scrollTop,
@@ -621,9 +612,7 @@ class ContinuousViewManager extends DefaultViewManager {
       this.scrollBy(0, this.layout.height, true);
     }
 
-    this.q.enqueue(() => {
-      return this.check();
-    });
+    this.q.enqueue(() => this.check(), 'ContinuousViewManager: check');
 
     return Promise.resolve();
   }
@@ -642,9 +631,7 @@ class ContinuousViewManager extends DefaultViewManager {
       this.scrollBy(0, -this.layout.height, true);
     }
 
-    this.q.enqueue(() => {
-      return this.check();
-    });
+    this.q.enqueue(() => this.check(), 'ContinuousViewManager: check');
 
     return Promise.resolve();
   }

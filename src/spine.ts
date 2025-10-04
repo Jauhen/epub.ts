@@ -231,9 +231,8 @@ class Spine {
    * Loop over the Sections in the Spine
    * @return {method} forEach
    */
-  each(...args: any[]): any {
-    // @ts-ignore
-    return this.spineItems.forEach.apply(this.spineItems, args);
+  each(callback: (section: Section) => void): void {
+    this.spineItems.forEach(callback);
   }
 
   /**

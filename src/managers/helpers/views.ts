@@ -1,6 +1,8 @@
+import View from '../view';
+
 class Views {
   container: HTMLElement | null;
-  _views: any[];
+  _views: View[];
   length: number;
   hidden: boolean;
 

@@ -13,6 +13,10 @@ export interface ViewLocation {
 }
 
 export interface ManagerOptions extends ViewSettings {
+  settings?: any;
+  view?: any;
+  request?: any;
+  queue?: any;
   infinite?: boolean;
   overflow?: string;
   [key: string]: any;

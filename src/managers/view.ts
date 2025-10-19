@@ -1,5 +1,7 @@
 import Contents from '../contents';
 import Layout from '../layout';
+import { Section } from '../section';
+import { Bounds } from '../utils/core';
 
 export interface ViewSettings {
   ignoreClass?: string;
@@ -14,6 +16,11 @@ export interface ViewSettings {
 }
 
 export default interface View {
+  section: Section;
+  expanded?: boolean;
+  displayed: boolean;
+  contents?: Contents;
+
   create(): any;
 
   render(request?: Function, show?: boolean): Promise<void>;
@@ -28,7 +35,7 @@ export default interface View {
 
   setAxis(axis: string): void;
 
-  display(request?: Function): Promise<any>;
+  display(request?: Function): Promise<View>;
 
   show(): void;
 
@@ -40,7 +47,7 @@ export default interface View {
 
   height(): number;
 
-  position(): object;
+  position(): DOMRect;
 
   locationOf(target: string): { top: number; left: number };
 
@@ -56,7 +63,7 @@ export default interface View {
     },
   ): void;
 
-  bounds(force?: boolean): object;
+  bounds(force?: boolean): Bounds;
 
   highlight(
     cfiRange: string,

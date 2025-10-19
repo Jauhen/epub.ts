@@ -1,55 +1,12 @@
 import debounce from 'lodash/debounce';
 
+import type Section from '../../section';
 import { EVENTS } from '../../utils/constants';
 import { defer, requestAnimationFrame } from '../../utils/core';
 import Snap from '../helpers/snap';
+import { ManagerOptions } from '../manager';
+import View from '../view';
 import DefaultViewManager from './default';
-
-// Type imports
-interface Section {
-  index: number;
-  href: string;
-  prev(): Section | null;
-  next(): Section | null;
-  properties: string[];
-}
-
-interface Layout {
-  name: string;
-  props: any;
-  divisor: number;
-  delta: number;
-  height: number;
-  width: number;
-}
-
-interface Contents {
-  // Contents interface
-}
-
-interface View {
-  section: Section;
-  expanded?: boolean;
-  displayed: boolean;
-  display(request: any): Promise<View>;
-  show(): void;
-  hide(): void;
-  destroy(): Promise<void>;
-  bounds(): any;
-  on(event: string, callback: Function): void;
-  onDisplayed?: Function;
-  onResize?: Function;
-}
-
-interface ManagerOptions {
-  settings?: any;
-  view?: any;
-  request?: any;
-  queue?: any;
-  infinite?: boolean;
-  overflow?: string;
-  [key: string]: any;
-}
 
 class ContinuousViewManager extends DefaultViewManager {
   public scrollTop = 0;
@@ -123,13 +80,9 @@ class ContinuousViewManager extends DefaultViewManager {
     const full = _full || defer();
 
     this.q
-      .enqueue(() => this.check(), 'ContinuousViewManager: check')
+      .enqueue<boolean>(() => this.check(), 'ContinuousViewManager: check')
       .then((result) => {
-        if (result as unknown) {
-          this.fill(full);
-        } else {
-          full.resolve();
-        }
+        result ? this.fill(full) : full.resolve();
       });
 
     return full.promise;
@@ -266,7 +219,7 @@ class ContinuousViewManager extends DefaultViewManager {
 
         if (!view.displayed) {
           const displayed = view.display(this.request).then(
-            function (view: View) {
+            (view: View) => {
               view.show();
             },
             (err: any) => {
@@ -348,53 +301,39 @@ class ContinuousViewManager extends DefaultViewManager {
       }
     }
 
-    const prepend = () => {
-      const first = this.views?.first();
-      const prev = first && first.section.prev();
+    const end = offset + visibleLength + delta;
+    const start = offset - delta;
 
-      if (prev) {
-        newViews.push(this.prepend(prev));
-      }
-    };
-
-    const append = () => {
+    if (end >= contentLength) {
       const last = this.views?.last();
       const next = last && last.section.next();
 
       if (next) {
         newViews.push(this.append(next));
       }
-    };
-
-    const end = offset + visibleLength + delta;
-    const start = offset - delta;
-
-    if (end >= contentLength) {
-      append();
     }
 
     if (start < 0) {
-      prepend();
+      const first = this.views?.first();
+      const prev = first && first.section.prev();
+
+      if (prev) {
+        newViews.push(this.prepend(prev));
+      }
     }
 
-    const promises = newViews.map((view) => {
-      return view;
-    });
+    const promises = newViews.map((view) => view);
 
     if (newViews.length) {
-      return Promise.all(promises)
-        .then((): Promise<boolean> => {
-          return this.check();
-        })
-        .then(
-          () => {
+      return (
+        Promise.all(promises)
+          // .then(() => this.check())
+          .then(
             // Check to see if anything new is on screen after rendering
-            return this.update(delta);
-          },
-          (err: any) => {
-            return err;
-          },
-        );
+            () => this.update(delta),
+            (err: any) => err,
+          )
+      );
     } else {
       this.q.enqueue(() => this.update(), 'ContinuousViewManager: update');
       checking.resolve(false);

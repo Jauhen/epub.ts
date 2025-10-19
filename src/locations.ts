@@ -24,7 +24,7 @@ class Locations extends EventEmitter {
   _locations: string[] | undefined;
   _locationsWords: any[] | undefined;
   total: number | undefined;
-  break: number | undefined;
+  break?: number;
   _current: number | undefined;
   _wordCounter: number | undefined;
   _currentCfi: string | undefined;
@@ -120,11 +120,11 @@ class Locations extends EventEmitter {
     let counter = 0;
     let prev: any;
     const _break = chars || this.break;
-    const parser = (node: any) => {
-      const len = node.length;
+    const parser = (node: Node) => {
+      const len = node.textContent?.length || 0;
       let dist;
       let pos = 0;
-      if (node.textContent.trim().length === 0) {
+      if ((node.textContent || '').trim().length === 0) {
         return false; // continue
       }
       // Start range
@@ -133,7 +133,7 @@ class Locations extends EventEmitter {
         range.startContainer = node;
         range.startOffset = 0;
       }
-      dist = (_break as number) - counter;
+      dist = _break! - counter;
       // Node is smaller than a break,
       // skip over it
       if (dist > len) {
@@ -141,7 +141,7 @@ class Locations extends EventEmitter {
         pos = len;
       }
       while (pos < len) {
-        dist = (_break as number) - counter;
+        dist = _break! - counter;
         if (counter === 0) {
           // Start new range
           pos += 1;
@@ -168,7 +168,7 @@ class Locations extends EventEmitter {
       prev = node;
     };
     if (body) {
-      sprint(body as Node, parser.bind(this));
+      sprint(body, parser);
     }
     // Close remaining
     if (range && range.startContainer && prev) {

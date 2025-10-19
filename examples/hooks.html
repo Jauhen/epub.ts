@@ -17,9 +17,7 @@
     <script>
       var currentSectionIndex = 8;
       // Load the opf
-      var book = ePub(
-        'https://s3.amazonaws.com/epubjs/books/moby-dick/OPS/package.opf',
-      );
+      var book = ePub('/fixtures/moby-dick/OPS/package.opf');
       var rendition = book.renderTo('viewer', { flow: 'scrolled-doc' });
 
       rendition.display('chapter_001.xhtml');

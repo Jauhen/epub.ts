@@ -4,6 +4,7 @@ import Annotations from './annotations';
 import type Book from './book';
 import EpubCFI from './epubcfi';
 import Layout from './layout';
+import Manager, { ManagerOptions } from './managers/manager';
 import ContinuousViewManager from './managers/managers/continuous';
 // Default View Managers
 import DefaultViewManager from './managers/managers/default';
@@ -19,7 +20,7 @@ export interface RenditionOptions {
   width?: number | string;
   height?: number | string;
   ignoreClass?: string;
-  manager?: string | Function | object;
+  manager?: string | (new (options: ManagerOptions) => Manager);
   view?: string | Function | object;
   flow?: string;
   layout?: string;
@@ -230,8 +231,10 @@ class Rendition extends EventEmitter {
    * @param  {string|object} manager [description]
    * @return {method}
    */
-  requireManager(manager: any): any {
-    let viewManager;
+  requireManager(
+    manager: string | (new (options: ManagerOptions) => Manager),
+  ): new (options: ManagerOptions) => Manager {
+    let viewManager: new (options: ManagerOptions) => Manager;
 
     // If manager is a string, try to load from imported managers
     if (typeof manager === 'string' && manager === 'default') {
@@ -240,7 +243,7 @@ class Rendition extends EventEmitter {
       viewManager = ContinuousViewManager;
     } else {
       // otherwise, assume we were passed a class function
-      viewManager = manager;
+      viewManager = manager as new (...args: any[]) => Manager;
     }
 
     return viewManager;

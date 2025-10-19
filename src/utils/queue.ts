@@ -1,10 +1,10 @@
 import { Defer, defer, requestAnimationFrame } from './core';
 
-export interface QueuedTask {
-  task?: Task;
+export interface QueuedTask<T = void> {
+  task?: Task<T>;
   desc: string;
-  deferred?: Defer<void>;
-  promise: Promise<void>;
+  deferred?: Defer<T>;
+  promise: Promise<T>;
 }
 
 /**
@@ -13,7 +13,7 @@ export interface QueuedTask {
  * @param {scope} context what this will resolve to in the tasks
  */
 class Queue {
-  private _q: QueuedTask[];
+  private _q: QueuedTask<any>[];
   private tick: (callback: () => void) => number;
   private running: boolean | Promise<void> | undefined;
   private paused: boolean;
@@ -30,14 +30,17 @@ class Queue {
    * Add an item to the queue
    * @return {Promise}
    */
-  enqueue(task: (() => void) | Promise<void>, desc: string): Promise<void> {
+  enqueue<T = void>(
+    task: (() => T | Promise<T>) | Promise<T>,
+    desc: string,
+  ): Promise<T> {
     if (!task) {
       throw new Error('No Task Provided');
     }
 
-    let queued: QueuedTask;
+    let queued: QueuedTask<T>;
     if (typeof task === 'function') {
-      const deferred = defer<void>();
+      const deferred = defer<T>();
       const promise = deferred.promise;
       queued = {
         task: task,

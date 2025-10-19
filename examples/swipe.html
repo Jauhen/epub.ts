@@ -60,6 +60,90 @@
         // -- do stuff
       });
 
+      const segmenterEn = new Intl.Segmenter('en', { granularity: 'word' });
+
+      function highlightWord(contents, wordsToHighlight) {
+        const wordsObject = {};
+        wordsToHighlight.forEach((word) => {
+          wordsObject[word.toLowerCase()] = true;
+        });
+
+        // Recursively scan DOM for text nodes
+        // If a text node contains a word, wrap it in a span with a background color red.
+        function scanTextNodes(node) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            var text = node.textContent;
+
+            // Split text into words (preserving separators)
+            const iterator = segmenterEn.segment(text)[Symbol.iterator]();
+
+            // Create a document fragment to hold the new content
+            var fragment = document.createDocumentFragment();
+            var currentTextBuffer = '';
+            var hasMatch = false;
+
+            // Process each part of the split text in a single loop
+            for (const part of iterator) {
+              var trimmedPart = part.segment.toLowerCase();
+
+              // Check if this part matches any highlight word
+              if (trimmedPart && wordsObject[trimmedPart]) {
+                hasMatch = true;
+                // First, add any accumulated text as a single text node
+                if (currentTextBuffer) {
+                  var textNode = document.createTextNode(currentTextBuffer);
+                  fragment.appendChild(textNode);
+                  currentTextBuffer = '';
+                }
+
+                // Create highlighted span for the match
+                var span = document.createElement('span');
+                span.style.backgroundColor = 'red';
+                span.dataset.word = trimmedPart;
+                span.textContent = part.segment;
+                fragment.appendChild(span);
+              } else {
+                // Accumulate non-matching text
+                currentTextBuffer += part.segment;
+              }
+            }
+
+            // Only replace the node if there were matches
+            if (hasMatch) {
+              // Add any remaining accumulated text
+              if (currentTextBuffer) {
+                var textNode = document.createTextNode(currentTextBuffer);
+                fragment.appendChild(textNode);
+              }
+
+              // Replace the original text node with the fragment
+              if (fragment.childNodes.length > 0) {
+                node.parentNode.replaceChild(fragment, node);
+              }
+            }
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            // Recursively process child nodes
+            var children = Array.from(node.childNodes);
+            for (var i = 0; i < children.length; i++) {
+              scanTextNodes(children[i]);
+            }
+          }
+        }
+
+        // Start scanning from the content root
+        scanTextNodes(
+          contents.document.body || contents.document.documentElement,
+        );
+      }
+
+      rendition.hooks.content.register(function (contents) {
+        var wordsToHighlight = ['the', 'circulation', 'but', 'tiger-lilies'];
+        console.time('highlight');
+        highlightWord(contents, wordsToHighlight);
+        console.timeEnd('highlight');
+        return contents;
+      });
+
       // Navigation loaded
       book.loaded.navigation.then(function (toc) {
         // console.log(toc);

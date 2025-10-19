@@ -1,31 +1,15 @@
 import EventEmitter from 'events';
 
 import Mapping from '../../mapping';
+import Section from '../../section';
 import { EVENTS } from '../../utils/constants';
 import { defer, isNumber, windowBounds } from '../../utils/core';
 import Queue from '../../utils/queue';
 import scrollType from '../../utils/scrolltype';
 import Stage from '../helpers/stage';
 import Views from '../helpers/views';
-import Manager from '../manager';
-
-export interface ViewLocation {
-  index: number;
-  href: string;
-  pages: number[];
-  totalPages: number;
-  mapping: any;
-}
-
-export interface ManagerOptions {
-  settings?: any;
-  view?: any;
-  request?: any;
-  queue?: any;
-  infinite?: boolean;
-  overflow?: string;
-  [key: string]: any;
-}
+import Manager, { ManagerOptions, ViewLocation } from '../manager';
+import View from '../view';
 
 class DefaultViewManager extends EventEmitter implements Manager {
   public name: string;
@@ -321,7 +305,7 @@ class DefaultViewManager extends EventEmitter implements Manager {
     }
   }
 
-  display(section: any, target?: any): Promise<void> {
+  display(section: Section, target?: any): Promise<void> {
     const displaying = defer<void>();
     const displayed = displaying.promise;
 
@@ -763,7 +747,7 @@ class DefaultViewManager extends EventEmitter implements Manager {
     return this.location;
   }
 
-  scrolledLocation() {
+  scrolledLocation(): ViewLocation[] | undefined {
     const visible = this.visible();
     const container = this.container?.getBoundingClientRect();
     if (!container) return;
@@ -783,7 +767,7 @@ class DefaultViewManager extends EventEmitter implements Manager {
       offset = vertical ? window.scrollY : window.scrollX;
     }
 
-    const sections = visible.map((view) => {
+    const sections = visible.map((view: View) => {
       const { index, href } = view.section;
       const position = view.position();
       const width = view.width();
@@ -825,24 +809,24 @@ class DefaultViewManager extends EventEmitter implements Manager {
 
       const mapping = this.mapping?.page(
         view.contents,
-        view.section.cfiBase,
+        view.section.cfiBase!,
         startPos,
         endPos,
       );
 
       return {
         index,
-        href,
+        href: href!,
         pages,
         totalPages,
-        mapping,
+        mapping: mapping!,
       };
     });
 
     return sections;
   }
 
-  paginatedLocation() {
+  paginatedLocation(): ViewLocation[] | undefined {
     const visible = this.visible();
     const container = this.container?.getBoundingClientRect();
     if (!container) return;
@@ -854,7 +838,7 @@ class DefaultViewManager extends EventEmitter implements Manager {
       left = window.scrollX;
     }
 
-    const sections = visible.map((view) => {
+    const sections = visible.map((view: View) => {
       const { index, href } = view.section;
       let offset;
       const position = view.position();
@@ -882,7 +866,7 @@ class DefaultViewManager extends EventEmitter implements Manager {
 
       const mapping = this.mapping?.page(
         view.contents,
-        view.section.cfiBase,
+        view.section.cfiBase!,
         start,
         end,
       );
@@ -912,10 +896,10 @@ class DefaultViewManager extends EventEmitter implements Manager {
 
       return {
         index,
-        href,
+        href: href!,
         pages,
         totalPages,
-        mapping,
+        mapping: mapping!,
       };
     });
 

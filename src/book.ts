@@ -40,17 +40,6 @@ const INPUT_TYPE = {
 } as const;
 type InputType = (typeof INPUT_TYPE)[keyof typeof INPUT_TYPE];
 
-export interface BookOptions {
-  requestMethod?: RequestMethod;
-  requestCredentials?: boolean;
-  requestHeaders?: Record<string, string>;
-  encoding?: boolean;
-  replacements?: string;
-  canonical?: (path: string) => string;
-  openAs?: string;
-  store?: string;
-}
-
 /**
  * An Epub representation with methods for the loading, parsing and manipulation
  * of its contents.
@@ -73,7 +62,7 @@ export interface BookOptions {
   requestMethod?: RequestMethod;
   requestCredentials?: boolean;
   requestHeaders?: Record<string, string>;
-  encoding?: boolean;
+  encoding?: boolean; // true for base64, false for binary
   replacements?: string;
   canonical?: (path: string) => string;
   openAs?: string;

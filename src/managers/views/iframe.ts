@@ -3,9 +3,11 @@ import { Highlight, Pane, Underline } from 'marks-pane';
 
 import Contents from '../../contents';
 import EpubCFI from '../../epubcfi';
+import { Section } from '../../section';
 import { EVENTS } from '../../utils/constants';
 import {
   borders,
+  Bounds,
   bounds,
   createBlobUrl,
   isNumber,
@@ -33,7 +35,7 @@ interface IframeViewSettings {
 class IframeView extends EventEmitter implements View {
   public settings: IframeViewSettings;
   public id: string;
-  public section: any;
+  public section: Section;
   public index: number;
   public element: HTMLElement;
   public added: boolean;
@@ -51,8 +53,8 @@ class IframeView extends EventEmitter implements View {
   public resizing?: boolean;
   public _width?: number;
   public _height?: number;
-  public elementBounds?: any;
-  public prevBounds?: any;
+  public elementBounds?: Bounds;
+  public prevBounds?: Bounds & { widthDelta?: number; heightDelta?: number };
   public lockedWidth?: number;
   public lockedHeight?: number;
   public _expanding?: boolean;
@@ -407,13 +409,6 @@ class IframeView extends EventEmitter implements View {
   }
 
   reframe(width?: number, height?: number): void {
-    let size: {
-      width?: number;
-      height?: number;
-      widthDelta?: number;
-      heightDelta?: number;
-    };
-
     if (isNumber(width)) {
       this.element.style.width = width + 'px';
       if (this.iframe) this.iframe.style.width = width + 'px';
@@ -435,9 +430,9 @@ class IframeView extends EventEmitter implements View {
       ? safeHeight - this.prevBounds.height
       : safeHeight;
 
-    size = {
-      width: width,
-      height: height,
+    const size = {
+      width: width || 0,
+      height: height || 0,
       widthDelta: widthDelta,
       heightDelta: heightDelta,
     };
@@ -542,11 +537,11 @@ class IframeView extends EventEmitter implements View {
     if (this.document) {
       let link = this.document.querySelector("link[rel='canonical']");
       if (link) {
-        link.setAttribute('href', this.section.canonical);
+        link.setAttribute('href', this.section.canonical!);
       } else {
         link = this.document.createElement('link');
         link.setAttribute('rel', 'canonical');
-        link.setAttribute('href', this.section.canonical);
+        link.setAttribute('href', this.section.canonical!);
         const head = this.document.querySelector('head');
         if (head) head.appendChild(link);
       }
@@ -693,7 +688,7 @@ class IframeView extends EventEmitter implements View {
     // Stub, override with a custom functions
   }
 
-  bounds(force?: boolean): any {
+  bounds(force?: boolean): Bounds {
     if (force || !this.elementBounds) {
       this.elementBounds = bounds(this.element);
     }

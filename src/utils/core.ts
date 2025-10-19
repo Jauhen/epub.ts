@@ -274,6 +274,12 @@ export function indexOfSorted(
     );
   }
 }
+
+export interface Bounds {
+  width: number;
+  height: number;
+}
+
 /**
  * Find the bounds of an element
  * taking padding and margin into account
@@ -281,7 +287,7 @@ export function indexOfSorted(
  * @returns {{ width: Number, height: Number}}
  * @memberof Core
  */
-export function bounds(el: Element): { width: number; height: number } {
+export function bounds(el: Element): Bounds {
   const style = window.getComputedStyle(el);
   const widthProps = [
     'width',
@@ -650,7 +656,7 @@ export function qsp(
  * @param  {element} root element to start with
  * @param  {function} func function to run on each element
  */
-export function sprint(root: Node, func: Function): void {
+export function sprint(root: Node, func: (node: Node) => void): void {
   const doc = root.ownerDocument || root;
   if (typeof (doc as any).createTreeWalker !== 'undefined') {
     treeWalker(root, func, NodeFilter.SHOW_TEXT);

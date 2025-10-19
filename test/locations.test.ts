@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 
 import Locations from '../src/locations';
+import Spine from '../src/spine';
 import * as core from '../src/utils/core';
 
 describe('Locations', async () => {
@@ -11,7 +12,7 @@ describe('Locations', async () => {
       ).text();
       const doc = core.parse(chapter, 'application/xhtml+xml', true);
       const contents = doc.documentElement;
-      const locations = new Locations({});
+      const locations = new Locations({} as Spine);
       const result = locations.parse(contents, '/6/4[chap01ref]', 100);
       expect(result.length).to.equal(15);
     });
@@ -23,7 +24,7 @@ describe('Locations', async () => {
       const doc = core.parse(chapter, 'application/xhtml+xml', true);
       const contents = doc.documentElement;
 
-      const locations = new Locations({});
+      const locations = new Locations({} as Spine);
       const result = locations.parse(contents, '/6/4[chap01ref]', 100);
       expect(result.length).to.equal(15);
     });

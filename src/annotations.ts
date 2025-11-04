@@ -248,14 +248,14 @@ class Annotations {
  * @param {object} styles CSS styles to assign to annotation
  * @returns {Annotation} annotation
  */
-class Annotation extends EventEmitter {
+export class Annotation extends EventEmitter {
   public type: string;
   public cfiRange: string;
-  public data?: object;
+  public data?: Record<string, any>;
   public sectionIndex?: number;
   public cb?: Function;
   public className?: string;
-  public styles?: object;
+  public styles?: Record<string, any>;
   public mark: any;
 
   constructor(options: {

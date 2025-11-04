@@ -202,8 +202,8 @@ export class Section {
         last = pos;
       }
     };
-    sprint(section.document, (node: Element | Text) => {
-      find(node);
+    sprint(section.document, (node: Node) => {
+      find(node as Element | Text);
     });
     return matches;
   }

@@ -2,6 +2,7 @@ import Contents from '../contents';
 import Layout from '../layout';
 import { EpubCFIPair } from '../mapping';
 import Section from '../section';
+import Views from './helpers/views';
 import View, { ViewSettings } from './view';
 
 export interface ViewLocation {
@@ -23,6 +24,8 @@ export interface ManagerOptions extends ViewSettings {
 }
 
 export default interface Manager {
+  views?: Views;
+
   render(element: Element, size?: { width: number; height: number }): void;
 
   resize(width?: number, height?: number, epubcfi?: string): void;
@@ -54,6 +57,8 @@ export default interface Manager {
   updateAxis(axis: string, forceUpdate: boolean): void;
 
   updateFlow(flow: string): void;
+
+  moveTo(offset: any, width?: number): void;
 
   getContents(): Contents[];
 

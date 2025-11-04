@@ -1,3 +1,5 @@
+import { Pane } from 'marks-pane';
+
 import Contents from '../contents';
 import Layout from '../layout';
 import { Section } from '../section';
@@ -20,6 +22,7 @@ export default interface View {
   expanded?: boolean;
   displayed: boolean;
   contents?: Contents;
+  pane?: Pane;
 
   create(): any;
 

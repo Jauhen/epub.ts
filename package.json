@@ -1,5 +1,5 @@
 {
-  "name": "epubjs",
+  "name": "epubts",
   "version": "0.4.0",
   "description": "Parse and Render Epubs",
   "main": "src/index.ts",
@@ -19,7 +19,9 @@
     "docs:md": "documentation build src/epub.ts -f md -o documentation/md/API.md",
     "lint": "eslint ./src/**/*.ts; exit 0",
     "build": "metro build ./src/index.ts --reset-cache --minify=false --source-map --out=./dist/epub.js --platform=browser",
-    "build:minify": "metro build ./src/index.ts --reset-cache --minify=true --out=./dist/epub.min.js --platform=browser"
+    "build:minify": "metro build ./src/index.ts --reset-cache --minify=true --out=./dist/epub.min.js --platform=browser",
+    "build:native_full": "metro build ./src/react-native.ts --reset-cache --minify=false --source-map --out=./dist/epub-native.min.js --platform=browser && sed -i '' -e 's/\\\\/\\\\\\\\/g' -e 's/`/\\\\`/g' -e 's/\\${/\\\\${/g' -e '1i\\\nexport default `' -e '$a\\\n`;' dist/epub-native.min.js ",
+    "build:native": "metro build ./src/react-native.ts --reset-cache --minify=true --out=./dist/epub-native.min.js --platform=browser && sed -i '' -e 's/\\\\/\\\\\\\\/g' -e 's/`/\\\\`/g' -e 's/\\${/\\\\${/g' -e '1i\\\nexport default `' -e '$a\\\n`;' dist/epub-native.min.js "
   },
   "author": "fchasen@gmail.com",
   "license": "BSD-2-Clause",

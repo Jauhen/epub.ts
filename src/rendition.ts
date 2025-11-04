@@ -4,10 +4,12 @@ import Annotations from './annotations';
 import type Book from './book';
 import EpubCFI from './epubcfi';
 import Layout from './layout';
+import Views from './managers/helpers/views';
 import Manager, { ManagerOptions } from './managers/manager';
 import ContinuousViewManager from './managers/managers/continuous';
 // Default View Managers
 import DefaultViewManager from './managers/managers/default';
+import View from './managers/view';
 // Default Views
 import IframeView from './managers/views/iframe';
 import Themes from './themes';
@@ -97,7 +99,7 @@ class Rendition extends EventEmitter {
   q: Queue;
   location: Location | undefined;
   started: Promise<void>;
-  manager: any;
+  manager?: Manager;
   ViewManager: any;
   View: any;
   displaying: any;
@@ -222,7 +224,7 @@ class Rendition extends EventEmitter {
    * Set the manager function
    * @param {function} manager
    */
-  setManager(manager: any): void {
+  setManager(manager: Manager): void {
     this.manager = manager;
   }
 
@@ -316,20 +318,20 @@ class Rendition extends EventEmitter {
     this.layout(globalLayout);
 
     // Listen for displayed views
-    this.manager.on(EVENTS.MANAGERS.ADDED, this.afterDisplayed.bind(this));
-    this.manager.on(EVENTS.MANAGERS.REMOVED, this.afterRemoved.bind(this));
+    this.manager?.on(EVENTS.MANAGERS.ADDED, this.afterDisplayed.bind(this));
+    this.manager?.on(EVENTS.MANAGERS.REMOVED, this.afterRemoved.bind(this));
 
     // Listen for resizing
-    this.manager.on(EVENTS.MANAGERS.RESIZED, this.onResized.bind(this));
+    this.manager?.on(EVENTS.MANAGERS.RESIZED, this.onResized.bind(this));
 
     // Listen for rotation
-    this.manager.on(
+    this.manager?.on(
       EVENTS.MANAGERS.ORIENTATION_CHANGE,
       this.onOrientationChange.bind(this),
     );
 
     // Listen for scroll changes
-    this.manager.on(EVENTS.MANAGERS.SCROLLED, this.reportLocation.bind(this));
+    this.manager?.on(EVENTS.MANAGERS.SCROLLED, this.reportLocation.bind(this));
 
     /**
      * Emit that rendering has started
@@ -351,9 +353,9 @@ class Rendition extends EventEmitter {
   attachTo(element: Element): Promise<void> {
     return this.q.enqueue(() => {
       // Start rendering
-      this.manager.render(element, {
-        width: this.settings.width,
-        height: this.settings.height,
+      this.manager?.render(element, {
+        width: this.settings.width as number,
+        height: this.settings.height as number,
       });
 
       /**
@@ -418,7 +420,7 @@ class Rendition extends EventEmitter {
       return displayed;
     }
 
-    this.manager.display(section, target).then(
+    this.manager?.display(section, target as string).then(
       () => {
         displaying.resolve(section);
         this.displaying = undefined;
@@ -571,7 +573,7 @@ class Rendition extends EventEmitter {
    * @param {object} offset
    */
   moveTo(offset: any): void {
-    this.manager.moveTo(offset);
+    this.manager?.moveTo(offset);
   }
 
   /**
@@ -587,14 +589,14 @@ class Rendition extends EventEmitter {
     if (height) {
       this.settings.height = height;
     }
-    this.manager.resize(width, height, epubcfi);
+    this.manager?.resize(width, height, epubcfi);
   }
 
   /**
    * Clear all rendered views
    */
   clear() {
-    this.manager.clear();
+    this.manager?.clear();
   }
 
   /**
@@ -603,7 +605,7 @@ class Rendition extends EventEmitter {
    */
   next() {
     return this.q
-      .enqueue(() => this.manager.next(), 'Rendition: next')
+      .enqueue(() => this.manager?.next(), 'Rendition: next')
       .then(() => this.reportLocation());
   }
 
@@ -613,7 +615,7 @@ class Rendition extends EventEmitter {
    */
   prev() {
     return this.q
-      .enqueue(() => this.manager.prev(), 'Rendition: prev')
+      .enqueue(() => this.manager?.prev(), 'Rendition: prev')
       .then(() => this.reportLocation());
   }
 
@@ -771,24 +773,27 @@ class Rendition extends EventEmitter {
   reportLocation() {
     return this.q.enqueue(() => {
       requestAnimationFrame(() => {
-        const location = this.manager.currentLocation();
-        if (location && location.then && typeof location.then === 'function') {
-          location.then((result: any) => {
-            const located = this.located(result);
-            if (!located || !located.start || !located.end) {
-              return;
-            }
-            this.location = located;
-            this.emit(EVENTS.RENDITION.LOCATION_CHANGED, {
-              index: this.location.start.index,
-              href: this.location.start.href,
-              start: this.location.start.cfi,
-              end: this.location.end.cfi,
-              percentage: this.location.start.percentage,
-            });
-            this.emit(EVENTS.RENDITION.RELOCATED, this.location);
-          });
-        } else if (location) {
+        const location = this.manager?.currentLocation();
+        // TODO: Handle async locations from managers
+        // if (location && location.then && typeof location.then === 'function') {
+        //   location.then((result: any) => {
+        //     const located = this.located(result);
+        //     if (!located || !located.start || !located.end) {
+        //       return;
+        //     }
+        //     this.location = located;
+        //     this.emit(EVENTS.RENDITION.LOCATION_CHANGED, {
+        //       index: this.location.start.index,
+        //       href: this.location.start.href,
+        //       start: this.location.start.cfi,
+        //       end: this.location.end.cfi,
+        //       percentage: this.location.start.percentage,
+        //     });
+        //     this.emit(EVENTS.RENDITION.RELOCATED, this.location);
+        //   });
+        // } else
+
+        if (location) {
           const located = this.located(location);
           if (!located || !located.start || !located.end) {
             return;
@@ -812,12 +817,15 @@ class Rendition extends EventEmitter {
    * @return {displayedLocation | promise} location (may be a promise)
    */
   currentLocation(): Location | Promise<Location> | undefined {
-    const location = this.manager.currentLocation();
-    if (location && location.then && typeof location.then === 'function') {
-      return location.then((result: any) => {
-        return this.located(result);
-      });
-    } else if (location) {
+    const location = this.manager?.currentLocation();
+    // TODO: Handle async locations from managers
+    // if (location && location.then && typeof location.then === 'function') {
+    //   return location.then((result: any) => {
+    //     return this.located(result);
+    //   });
+    // } else
+
+    if (location) {
       return this.located(location);
     }
     return undefined;
@@ -999,15 +1007,16 @@ class Rendition extends EventEmitter {
    * @param  {string} ignoreClass
    * @return {range}
    */
-  getRange(cfi: string, ignoreClass?: string): Range | undefined {
+  getRange(cfi: string, ignoreClass?: string): Range | null | undefined {
     const _cfi = new EpubCFI(cfi);
-    const found = this.manager.visible().filter(function (view: any) {
-      if (_cfi.spinePos === view.index) return true;
-    });
+    const found =
+      this.manager?.visible().filter(function (view: any) {
+        if (_cfi.spinePos === view.index) return true;
+      }) || [];
 
     // Should only every return 1 item
-    if (found.length) {
-      return found[0].contents.range(_cfi, ignoreClass);
+    if (found.length > 0) {
+      return found[0].contents?.range(_cfi, ignoreClass);
     }
   }
 
@@ -1073,11 +1082,11 @@ class Rendition extends EventEmitter {
 
   /**
    * Get the views member from the manager
-   * @returns {Views}
+   * @returns {View[]}
    */
-  views() {
+  views(): View[] {
     const views = this.manager ? this.manager.views : undefined;
-    return views || [];
+    return views?._views || [];
   }
 
   /**

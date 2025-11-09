@@ -339,7 +339,7 @@ class Locations extends EventEmitter {
    */
   locationFromCfi(cfi: string | EpubCFI): number {
     let loc;
-    if ((EpubCFI.prototype as any).isCfiString(cfi)) {
+    if (EpubCFI.isCfiString(cfi)) {
       cfi = new EpubCFI(cfi as string);
     }
     if (!this._locations || this._locations.length === 0) {
@@ -347,14 +347,14 @@ class Locations extends EventEmitter {
     }
     // locationOf expects 5 arguments: needle, haystack, compare, start, end
     loc = locationOf(
-      cfi,
+      cfi as EpubCFI,
       this._locations,
-      (this.epubcfi as any).compare,
+      EpubCFI.compare,
       0,
       this._locations.length - 1,
     );
-    if (loc > (this.total as number)) {
-      return this.total as number;
+    if (loc > this.total!) {
+      return this.total!;
     }
     return loc;
   }

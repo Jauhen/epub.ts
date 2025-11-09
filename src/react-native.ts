@@ -121,6 +121,8 @@ const reactNativeWebview = !!window.ReactNativeWebView
   : { postMessage: (message: string) => console.log(message) };
 //   : window;
 
+window.debugInfo = [];
+
 let book: Book;
 let rendition: Rendition;
 

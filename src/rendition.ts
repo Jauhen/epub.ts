@@ -4,8 +4,7 @@ import Annotations from './annotations';
 import type Book from './book';
 import EpubCFI from './epubcfi';
 import Layout from './layout';
-import Views from './managers/helpers/views';
-import Manager, { ManagerOptions } from './managers/manager';
+import Manager, { ManagerOptions, ViewLocation } from './managers/manager';
 import ContinuousViewManager from './managers/managers/continuous';
 // Default View Managers
 import DefaultViewManager from './managers/managers/default';
@@ -392,7 +391,7 @@ class Rendition extends EventEmitter {
     if (!this.book) {
       return Promise.resolve();
     }
-    const isCfiString = this.epubcfi.isCfiString(
+    const isCfiString = EpubCFI.isCfiString(
       typeof target === 'string' ? target : '',
     );
     const displaying = defer();
@@ -837,7 +836,7 @@ class Rendition extends EventEmitter {
    * @returns {displayedLocation}
    * @private
    */
-  located(location: any): Location {
+  located(location: ViewLocation[]): Location {
     if (!location.length) {
       return {} as Location;
     }

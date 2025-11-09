@@ -4,6 +4,8 @@
  */
 import { DOMParser as XMLDOMParser } from '@xmldom/xmldom';
 
+import EpubCFI from '../epubcfi';
+
 /**
  * Vendor prefixed requestAnimationFrame
  * @returns {function} requestAnimationFrame
@@ -154,9 +156,9 @@ export function defaults(obj: object): object {
  * @memberof Core
  */
 export function insert(
-  item: any,
-  array: any[],
-  compareFunction: Function,
+  item: string | EpubCFI,
+  array: string[],
+  compareFunction: (a: string | EpubCFI, b: string | EpubCFI) => number,
 ): number {
   const location = locationOf(
     item,
@@ -165,7 +167,7 @@ export function insert(
     0 as any,
     array.length as any,
   );
-  array.splice(location, 0, item);
+  array.splice(location, 0, item as string);
 
   return location;
 }
@@ -181,28 +183,27 @@ export function insert(
  * @memberof Core
  */
 export function locationOf(
-  item: any,
-  array: any[],
-  compareFunction: Function,
+  item: string | EpubCFI,
+  array: string[],
+  compareFunction: (a: string | EpubCFI, b: string | EpubCFI) => number,
   _start?: number,
   _end?: number,
 ): number {
   const start = _start || 0;
   const end = _end || array.length;
-  const pivot = parseInt(String(start + (end - start) / 2));
-  let compared;
+  const pivot = Math.floor((start + end) / 2);
   if (!compareFunction) {
-    compareFunction = function (a: any, b: any) {
+    compareFunction = function (a: string | EpubCFI, b: string | EpubCFI) {
       if (a > b) return 1;
       if (a < b) return -1;
-      if (a == b) return 0;
+      return 0;
     };
   }
   if (end - start <= 0) {
     return pivot;
   }
 
-  compared = (compareFunction as any)(array[pivot], item);
+  const compared = compareFunction(array[pivot], item);
   if (end - start === 1) {
     return compared >= 0 ? pivot : pivot + 1;
   }
@@ -210,9 +211,9 @@ export function locationOf(
     return pivot;
   }
   if (compared === -1) {
-    return locationOf(item, array, compareFunction, pivot as any, end as any);
+    return locationOf(item, array, compareFunction, pivot, end);
   } else {
-    return locationOf(item, array, compareFunction, start as any, pivot as any);
+    return locationOf(item, array, compareFunction, start, pivot);
   }
 }
 

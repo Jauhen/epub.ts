@@ -653,7 +653,7 @@ class Contents extends EventEmitter {
 
     if (!this.document) return targetPos;
 
-    if (typeof target === 'string' && this.epubcfi.isCfiString(target)) {
+    if (typeof target === 'string' && EpubCFI.isCfiString(target)) {
       const range = new EpubCFI(target).toRange(this.document, ignoreClass);
 
       if (range) {

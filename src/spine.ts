@@ -153,7 +153,7 @@ class Spine {
         }
         index += 1;
       }
-    } else if (typeof target === 'string' && this.epubcfi.isCfiString(target)) {
+    } else if (typeof target === 'string' && EpubCFI.isCfiString(target)) {
       const cfi = new EpubCFI(target);
       index = cfi.spinePos;
     } else if (typeof target === 'number') {

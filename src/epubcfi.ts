@@ -119,7 +119,7 @@ class EpubCFI {
    * @private
    */
   checkType(cfi?: string | Range | Node | EpubCFI): string | false {
-    if (this.isCfiString(cfi)) {
+    if (EpubCFI.isCfiString(cfi)) {
       return 'string';
       // Is a range object
     } else if (
@@ -1164,7 +1164,7 @@ class EpubCFI {
    * @param {string} str
    * @returns {boolean}
    */
-  isCfiString(str?: string | Range | Node | EpubCFI): boolean {
+  static isCfiString(str?: string | Range | Node | EpubCFI): boolean {
     if (
       typeof str === 'string' &&
       str.indexOf('epubcfi(') === 0 &&

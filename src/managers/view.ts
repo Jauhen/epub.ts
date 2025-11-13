@@ -73,7 +73,7 @@ export default interface View {
     data?: object,
     cb?: Function,
     className?: string,
-    styles?: object,
+    styles?: Record<string, string | number | boolean>,
   ): void;
 
   underline(
@@ -81,7 +81,7 @@ export default interface View {
     data?: object,
     cb?: Function,
     className?: string,
-    styles?: object,
+    styles?: Record<string, string | number | boolean>,
   ): void;
 
   mark(cfiRange: string, data?: object, cb?: Function): void;

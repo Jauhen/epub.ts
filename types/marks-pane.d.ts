@@ -30,12 +30,12 @@ declare module 'marks-pane' {
   export class Highlight extends Mark {
     className: string;
     data: { [key: string]: string };
-    attributes: { [key: string]: string | number | boolean };
+    attributes: Record<string, string | number | boolean>;
     constructor(
       range: Range,
       className?: string,
       data?: { [key: string]: string },
-      attributes?: { [key: string]: string | number | boolean },
+      attributes?: Record<string, string | number | boolean>,
     );
     bind(element: HTMLElement, container: HTMLElement): void;
     render(): void;
@@ -46,7 +46,7 @@ declare module 'marks-pane' {
       range: Range,
       className?: string,
       data?: { [key: string]: string },
-      attributes?: { [key: string]: string | number | boolean },
+      attributes?: Record<string, string | number | boolean>,
     );
     render(): void;
   }

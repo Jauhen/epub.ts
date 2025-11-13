@@ -700,15 +700,17 @@ class IframeView extends EventEmitter implements View {
     data: Record<string, any> = {},
     cb?: EventListener,
     className = 'epubjs-hl',
-    styles: Record<string, any> = {},
+    styles: Record<string, string | number | boolean> = {},
   ): Highlight | undefined {
     if (!this.contents) {
       return;
     }
-    const attributes = Object.assign(
-      { fill: 'yellow', 'fill-opacity': '0.3', 'mix-blend-mode': 'multiply' },
-      styles,
-    );
+    const attributes = {
+      fill: 'yellow',
+      'fill-opacity': '0.3',
+      'mix-blend-mode': 'multiply',
+      ...styles,
+    };
     const range = this.contents.range(cfiRange);
     const emitter = () => {
       (this as any).emit(EVENTS.VIEWS.MARK_CLICKED, cfiRange, data);
@@ -741,19 +743,17 @@ class IframeView extends EventEmitter implements View {
     data: Record<string, any> = {},
     cb?: EventListener,
     className = 'epubjs-ul',
-    styles: Record<string, any> = {},
+    styles: Record<string, string | number | boolean> = {},
   ): Underline | undefined {
     if (!this.contents) {
       return;
     }
-    const attributes = Object.assign(
-      {
-        stroke: 'black',
-        'stroke-opacity': '0.3',
-        'mix-blend-mode': 'multiply',
-      },
-      styles,
-    );
+    const attributes = {
+      stroke: 'black',
+      'stroke-opacity': '0.3',
+      'mix-blend-mode': 'multiply',
+      ...styles,
+    };
     const range = this.contents.range(cfiRange);
     const emitter = () => {
       (this as any).emit(EVENTS.VIEWS.MARK_CLICKED, cfiRange, data);
